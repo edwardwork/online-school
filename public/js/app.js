@@ -37722,15 +37722,18 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card text-center" }, [
-    _c("div", { staticClass: "card-header" }, [
-      _vm._v("\n        Тестовые задания\n    ")
-    ]),
+    _c(
+      "div",
+      { staticClass: "card-header", staticStyle: { "font-size": "2rem" } },
+      [_vm._v("\n        Тестовые задания\n    ")]
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "card-body", attrs: { id: "question_content" } }, [
       _c(
         "button",
         {
           staticClass: "btn btn-primary btn-lg",
+          staticStyle: { "font-size": "1.5rem" },
           attrs: { id: "start_test" },
           on: {
             click: function($event) {
@@ -37754,6 +37757,7 @@ var render = function() {
           }
         ],
         staticClass: "card-footer text-muted",
+        staticStyle: { "font-size": "1.5rem" },
         attrs: { id: "question_info" }
       },
       [_vm._v("\n        " + _vm._s(this.showCountAttempt()) + "\n    ")]
@@ -50025,7 +50029,7 @@ var TemplateBuilder = /*#__PURE__*/function () {
   }, {
     key: "addAnswer",
     value: function addAnswer(answer) {
-      this.template += "<div class=\"answer-block\">";
+      this.template += "<div class=\"answer-block\" style=\"font-size: 2rem;\">";
 
       if (answer.text !== null) {
         this.template += "<input class=\"type_".concat(this.type, "\" type='checkbox' name=\"answer\" value='").concat(answer.text, "'><span class=\"answer-text\"> ").concat(answer.text, "</span>");
@@ -50041,7 +50045,7 @@ var TemplateBuilder = /*#__PURE__*/function () {
   }, {
     key: "addAnswerButton",
     value: function addAnswerButton() {
-      this.template += "</div><br><button class=\"btn btn-success btn-lg\" id=\"get_next\">\u041E\u0442\u0432\u0435\u0442\u0438\u0442\u044C \u0438 \u043F\u0435\u0440\u0435\u0439\u0442\u0438 \u0434\u0430\u043B\u044C\u0448\u0435</button>";
+      this.template += "</div><br><button class=\"btn btn-success btn-lg\" style=\"font-size: 1.5rem;\" id=\"get_next\">\u041E\u0442\u0432\u0435\u0442\u0438\u0442\u044C \u0438 \u043F\u0435\u0440\u0435\u0439\u0442\u0438 \u0434\u0430\u043B\u044C\u0448\u0435</button>";
 
       if (Number(this.type) === 3) {
         this.template += "<div id=\"example_answer\"><p>\u0412\u0430\u0448 \u043E\u0442\u0432\u0435\u0442 \u0431\u0443\u0434\u0435\u0442 \u043F\u0440\u0438\u043D\u044F\u0442, \u043A\u0430\u043A: </p></div>";

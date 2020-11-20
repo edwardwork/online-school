@@ -78,7 +78,7 @@
 
                 <div class="content">
                     <div class="title m-b-md">
-                        Welcome to Nick's school! :)
+                        Welcome to Nick's school :)
                     </div>
                 </div>
         </div>

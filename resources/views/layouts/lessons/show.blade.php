@@ -5,7 +5,7 @@
 		<div class="container">
 
 			<nav aria-label="breadcrumb">
-				<ol class="breadcrumb">
+				<ol class="breadcrumb" style="font-size: 1.5rem;">
 					<li class="breadcrumb-item"><a href="/">Главная</a></li>
 					<li class="breadcrumb-item"><a href="{{ route('list_topics') }}">Темы</a></li>
 					<li class="breadcrumb-item"><a href="{{ route('show_topic', ['topic' => $topic->id]) }}">{{ $topic->name }}</a></li>
@@ -28,7 +28,7 @@
 				@endif
 
 				<div>
-					<a href="{{ asset('storage/'.$lesson->pdf_url) }}" target="_blank" class="alert-link">
+					<a href="{{ asset('storage/'.$lesson->pdf_url) }}" target="_blank" class="alert-link" style="font-size: 1.8rem;">
 						<div class="alert alert-primary" role="alert">
 							Открыть методичку
 						</div>

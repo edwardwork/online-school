@@ -21,7 +21,7 @@ export default class TemplateBuilder {
     }
 
     addAnswer(answer) {
-        this.template += `<div class="answer-block">`;
+        this.template += `<div class="answer-block" style="font-size: 2rem;">`;
         if(answer.text !== null) {
             this.template += `<input class="type_${this.type}" type='checkbox' name="answer" value='${answer.text}'><span class="answer-text"> ${answer.text}</span>`;
         }
@@ -33,7 +33,7 @@ export default class TemplateBuilder {
     }
 
     addAnswerButton() {
-        this.template += `</div><br><button class="btn btn-success btn-lg" id="get_next">Ответить и перейти дальше</button>`;
+        this.template += `</div><br><button class="btn btn-success btn-lg" style="font-size: 1.5rem;" id="get_next">Ответить и перейти дальше</button>`;
         if(Number(this.type) === 3) {
             this.template += `<div id="example_answer"><p>Ваш ответ будет принят, как: </p></div>`;
         }

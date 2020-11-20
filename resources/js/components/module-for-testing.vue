@@ -1,14 +1,14 @@
 <template>
     <div class="card text-center">
-        <div class="card-header">
+        <div class="card-header" style="font-size: 2rem;">
             Тестовые задания
         </div>
 
         <div class="card-body" id="question_content">
-            <button class="btn btn-primary btn-lg" id="start_test" @click="renderQuestion(getTemplateForQuestion())">Начать тест</button>
+            <button class="btn btn-primary btn-lg" id="start_test" style="font-size: 1.5rem;"  @click="renderQuestion(getTemplateForQuestion())">Начать тест</button>
         </div>
 
-        <div class="card-footer text-muted" id="question_info" v-show="status">
+        <div class="card-footer text-muted" id="question_info" v-show="status" style="font-size: 1.5rem;">
             {{ this.showCountAttempt() }}
         </div>
 
