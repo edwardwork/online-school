@@ -18,8 +18,8 @@
 				<div>
 					<div class="card" style="width: 18rem;">
 						<div class="card-body">
-							<h5 class="card-title">{{ $lesson->name }}</h5>
-							<a href="{{ route('show_lesson', ['lesson_id' => $lesson->id]) }}" class="btn btn-primary">Перейти к уроку</a>
+							<h5 class="card-title" style="font-size: 2rem;">{{ $lesson->name }}</h5>
+							<a href="{{ route('show_lesson', ['lesson_id' => $lesson->id]) }}" style="font-size: 1.5rem;" class="btn btn-primary">Перейти к уроку</a>
 						</div>
 					</div>
 				</div>
