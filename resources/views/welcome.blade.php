@@ -68,10 +68,10 @@
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/topics') }}">Материалы для обучения</a>
+                    @authanswer-block
+                        <a href="{{ url('/topics') }}" style="font-size: 3rem;" class="text-center">Обучение</a>
                     @else
-                        <a href="{{ route('login') }}">Войти</a>
+                        <a href="{{ route('login') }}" style="font-size: 3rem;" class="text-center">Войти</a>
                     @endauth
                 </div>
             @endif

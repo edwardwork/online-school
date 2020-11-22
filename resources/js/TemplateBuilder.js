@@ -4,7 +4,7 @@ export default class TemplateBuilder {
     }
 
     setTitle(title = ``) {
-        this.template += `<p>${title}</p>`;
+        this.template += `<p style="font-size: 2.5rem;">${title}</p>`;
     }
 
     setImage(url = ``) {
@@ -21,7 +21,7 @@ export default class TemplateBuilder {
     }
 
     addAnswer(answer) {
-        this.template += `<div class="answer-block" style="font-size: 2rem;">`;
+        this.template += `<div class="answer-block" style="font-size: 2rem; margin-top: 18px;">`;
         if(answer.text !== null) {
             this.template += `<input class="type_${this.type}" type='checkbox' name="answer" value='${answer.text}'><span class="answer-text"> ${answer.text}</span>`;
         }
@@ -33,7 +33,7 @@ export default class TemplateBuilder {
     }
 
     addAnswerButton() {
-        this.template += `</div><br><button class="btn btn-success btn-lg" style="font-size: 1.5rem;" id="get_next">Ответить и перейти дальше</button>`;
+        this.template += `</div><br><button class="btn btn-success btn-lg" style="font-size: 2rem;" id="get_next">Ответить и перейти дальше</button>`;
         if(Number(this.type) === 3) {
             this.template += `<div id="example_answer"><p>Ваш ответ будет принят, как: </p></div>`;
         }

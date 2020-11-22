@@ -279,7 +279,7 @@
 	/*}*/
 
 	.answer-text{
-		font-size: 24px;
+		font-size: 3rem;
 	}
 
 	.error{
