@@ -23,6 +23,9 @@
         body {
             font-size: 2.5rem;
         }
+        .form-control {
+            font-size: 1.9rem;
+        }
     </style>
 </head>
 <body>
