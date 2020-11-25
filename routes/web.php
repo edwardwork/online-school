@@ -71,4 +71,4 @@ Route::get('/introduction', 'IntroductionVideoController@index');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::redirect('/home', '/topics')->name('home');

@@ -13,7 +13,9 @@
 		</nav>
 
 		<div class="card-deck">
-
+            <a href="/topics" style="font-size: 1.8rem;" class="btn btn-primary">К списку уроков</a>
+            <br>
+            <br>
 			@foreach($topic->lessons as $lesson)
 				<div>
 					<div class="card" style="width: 18rem;">
