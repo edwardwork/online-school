@@ -17,6 +17,9 @@ class LessonController extends Controller
         $user = \Auth::user();
         $lesson = Lesson::with(['questions.answers', 'topic'])->find($lesson_id);
         $questions = $lesson->questions;
+        if($questions->isEmpty()) {
+            throw new \Exception('Для этого урока не заданы вопросы :(');
+        }
         $answers = $lesson->questions->pluck('answers')->flatten();
         $lesson_status = UserStatus::firstOrCreate(
             [
