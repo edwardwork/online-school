@@ -82,8 +82,9 @@ class ActionRequest extends NovaRequest
         $output = [];
 
         $this->toSelectedResourceQuery()->when(! $this->forAllMatchingResources(), function ($query) {
-            $query->whereKey(explode(',', $this->resources));
-        })->latest($this->model()->getKeyName())->chunk($count, function ($chunk) use ($callback, &$output) {
+            $query->whereKey(explode(',', $this->resources))
+                ->latest($this->model()->getQualifiedKeyName());
+        })->chunk($count, function ($chunk) use ($callback, &$output) {
             $output[] = $callback($this->mapChunk($chunk));
         });
 
@@ -102,8 +103,14 @@ class ActionRequest extends NovaRequest
         }
 
         return $this->viaRelationship()
-                        ? $this->modelsViaRelationship()
-                        : $this->newQueryWithoutScopes();
+                    ? $this->modelsViaRelationship()
+                    : tap($this->newQueryWithoutScopes(), function ($query) {
+                        $resource = $this->resource();
+
+                        $resource::indexQuery(
+                            $this, $query
+                        );
+                    });
     }
 
     /**
@@ -138,8 +145,15 @@ class ActionRequest extends NovaRequest
      */
     public function validateFields()
     {
-        $this->validate(collect($this->action()->fields())->mapWithKeys(function ($field) {
+        $fields = collect($this->action()->fields());
+
+        $this->validate($fields->mapWithKeys(function ($field) {
             return $field->getCreationRules($this);
+        })->all(), [], $fields->reject(function ($field) {
+            return empty($field->name);
+        })
+        ->mapWithKeys(function ($field) {
+            return [$field->attribute => $field->name];
         })->all());
     }
 

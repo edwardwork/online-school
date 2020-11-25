@@ -13,6 +13,6 @@ class ResourceIndexRequest extends NovaRequest
      */
     public function toCount()
     {
-        return $this->buildCountQuery($this->toQuery())->count();
+        return $this->toQuery()->toBase()->getCountForPagination();
     }
 }

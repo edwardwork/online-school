@@ -3,7 +3,7 @@
     <div class="flex mb-4">
       <h3 class="mr-3 text-base text-80 font-bold">{{ title }}</h3>
 
-      <div v-if="helpText" class="absolute pin-r pin-b p-2 z-25">
+      <div v-if="helpText" class="absolute pin-r pin-b p-2 z-20">
         <tooltip trigger="click">
           <icon
             type="help"
@@ -47,7 +47,7 @@
     <div
       ref="chart"
       class="absolute pin rounded-b-lg ct-chart"
-      style="top: 60%;"
+      style="top: 60%"
     />
   </loading-card>
 </template>
@@ -141,7 +141,9 @@ export default {
             }
 
             if (this.suffix) {
-              const suffix = SingularOrPlural(value, this.suffix)
+              const suffix = this.suffixInflection
+                ? SingularOrPlural(value, this.suffix)
+                : this.suffix
 
               return `${formattedValue} ${suffix}`
             }

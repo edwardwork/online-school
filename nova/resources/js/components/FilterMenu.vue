@@ -42,7 +42,7 @@
         />
 
         <!-- Soft Deletes -->
-        <div v-if="softDeletes && showTrashedOption">
+        <div v-if="softDeletes" dusk="filter-soft-deletes">
           <h3
             slot="default"
             class="text-sm uppercase tracking-wide text-80 bg-30 p-3"
@@ -66,7 +66,7 @@
         </div>
 
         <!-- Per Page -->
-        <div v-if="!viaResource">
+        <div v-if="!viaResource" dusk="filter-per-page">
           <h3
             slot="default"
             class="text-sm uppercase tracking-wide text-80 bg-30 p-3"
@@ -110,10 +110,6 @@ export default {
     },
     perPage: [String, Number],
     perPageOptions: Array,
-    showTrashedOption: {
-      type: Boolean,
-      default: true,
-    },
   },
 
   methods: {

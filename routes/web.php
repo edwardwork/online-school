@@ -13,19 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/topics');
+Route::redirect('/home', '/topics')->name('home');
 
-Route::group(['prefix' => 'topics'], function () {
+Route::group(['prefix' => 'topics', 'middleware' => 'auth'], function () {
 
-    Route::get('/', 'TopicController@index')->name('list_topics');
+    Route::get('/', 'TopicController@index')->name('topics.list');
 
     Route::get('/create', 'TopicController@create');
 
     Route::get('/edit/{topic}', 'TopicController@edit');
 
-    Route::get('/{topic}', 'TopicController@show')->name('show_topic');
+    Route::get('/{topic}', 'TopicController@show')->name('topics.show');
 
     Route::post('/', 'TopicController@store');
 
@@ -35,13 +34,13 @@ Route::group(['prefix' => 'topics'], function () {
 
 });
 
-Route::group(['prefix' => 'lessons'], function () {
+Route::group(['prefix' => 'lessons', 'middleware' => 'auth'], function () {
 
     Route::post('/getQuestionsAndAnswers', 'LessonController@getQuestionsAndAnswers')->name('loadData');
 
     Route::get('/create/{topic_id}', 'LessonController@create');
 
-    Route::get('/{lesson_id}', 'LessonController@show')->name('show_lesson');
+    Route::get('/{lesson_id}', 'LessonController@show')->name('lesson.show');
 
     Route::post('/', 'LessonController@store');
 
@@ -51,7 +50,7 @@ Route::group(['prefix' => 'lessons'], function () {
 
 });
 
-Route::group(['prefix' => 'userStatus'], function () {
+Route::group(['prefix' => 'userStatus', 'middleware' => 'auth'], function () {
 
     Route::post('/', 'UserStatusController@store');
 
@@ -61,7 +60,7 @@ Route::group(['prefix' => 'userStatus'], function () {
 
 });
 
-Route::group(['prefix' => 'categories'], function () {
+Route::group(['prefix' => 'categories', 'middleware' => 'auth'], function () {
 
     Route::get('/{category}', 'CategoryController@show');
 
@@ -70,5 +69,3 @@ Route::group(['prefix' => 'categories'], function () {
 Route::get('/introduction', 'IntroductionVideoController@index');
 
 Auth::routes();
-
-Route::redirect('/home', '/topics')->name('home');

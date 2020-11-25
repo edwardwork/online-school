@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laravel\Nova\Contracts\Deletable as DeletableContract;
 use Laravel\Nova\Contracts\ListableField;
+use Laravel\Nova\Contracts\PivotableField;
 use Laravel\Nova\Contracts\RelatableField;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Rules\NotAttached;
 use Laravel\Nova\Rules\RelatableAttachment;
 use Laravel\Nova\TrashedStatus;
 
-class MorphToMany extends Field implements DeletableContract, ListableField, RelatableField
+class MorphToMany extends Field implements DeletableContract, ListableField, PivotableField, RelatableField
 {
     use Deletable, DetachesPivotModels, FormatsRelatableDisplayValues, Searchable;
 
@@ -230,6 +231,7 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
             'avatar' => $resource->resolveAvatarUrl($request),
             'display' => $this->formatDisplayValue($resource),
             'value' => $resource->getKey(),
+            'subtitle' => $resource->subtitle(),
         ]);
     }
 
@@ -292,6 +294,7 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
     public function jsonSerialize()
     {
         return array_merge([
+            'debounce' => $this->debounce,
             'listable' => true,
             'morphToManyRelationship' => $this->manyToManyRelationship,
             'perPage'=> $this->resourceClass::$perPageViaRelationship,

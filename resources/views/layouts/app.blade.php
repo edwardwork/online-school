@@ -23,8 +23,20 @@
         body {
             font-size: 2.5rem;
         }
-        .form-control {
-            font-size: 1.9rem;
+        .rem-1 {
+            font-size: 1rem;
+        }
+        .rem-2 {
+            font-size: 2rem;
+        }
+        .rem-3 {
+            font-size: 3rem;
+        }
+        .rem-4 {
+            font-size: 4rem;
+        }
+        .rem-5 {
+            font-size: 5rem;
         }
     </style>
 </head>
@@ -32,7 +44,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}" style="font-size: 3rem;">
+                <a class="navbar-brand rem-3" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -50,11 +62,11 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}" style="font-size: 3rem;">{{ __('Login') }}</a>
+                                <a class="nav-link rem-3" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}" style="font-size: 3rem;">{{ __('Register') }}</a>
+                                    <a class="nav-link rem-3" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
@@ -65,16 +77,16 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     @auth
-                                        <a href="{{ url('/topics') }}" style="font-size: 3rem;" class="dropdown-item">
+                                        <a href="{{ url('/topics') }}" class="dropdown-item rem-3">
                                             Обучение
                                         </a>
                                     @else
-                                        <a href="{{ route('login') }}" style="font-size: 3rem;" class="dropdown-item">Войти</a>
+                                        <a href="{{ route('login') }}" class="dropdown-item rem-3">Войти</a>
                                     @endauth
 
-                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                        <a class="dropdown-item rem-3" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();" style="font-size: 3rem;">
+                                                     document.getElementById('logout-form').submit();">
                                         Выйти
                                     </a>
 
@@ -89,11 +101,13 @@
             </div>
         </nav>
 
+        @yield('breadcrumbs')
+
         <main class="py-4">
             @yield('content')
         </main>
     </div>
 
-@section('scripts')
+    @stack('scripts')
 </body>
 </html>

@@ -24,6 +24,7 @@ use Laravel\Nova\Tests\Fixtures\QueuedResourceAction;
 use Laravel\Nova\Tests\Fixtures\QueuedUpdateStatusAction;
 use Laravel\Nova\Tests\Fixtures\RedirectAction;
 use Laravel\Nova\Tests\Fixtures\RequiredFieldAction;
+use Laravel\Nova\Tests\Fixtures\StandaloneAction;
 use Laravel\Nova\Tests\Fixtures\UnauthorizedAction;
 use Laravel\Nova\Tests\Fixtures\UnrunnableAction;
 use Laravel\Nova\Tests\Fixtures\UnrunnableDestructiveAction;
@@ -50,6 +51,9 @@ class ActionControllerTest extends IntegrationTest
         unset($_SERVER['queuedAction.appliedFields']);
         unset($_SERVER['queuedResourceAction.applied']);
         unset($_SERVER['queuedResourceAction.appliedFields']);
+
+        DB::disableQueryLog();
+        DB::flushQueryLog();
 
         parent::tearDown();
     }
@@ -90,6 +94,22 @@ class ActionControllerTest extends IntegrationTest
         $this->assertEquals('finished', $actionEvent->status);
     }
 
+    public function test_standalone_actions_can_be_applied()
+    {
+        $response = $this->withoutExceptionHandling()
+                        ->post('/nova-api/users/action?action='.(new StandaloneAction)->uriKey(), [
+                            'resources' => '',
+                            'name' => 'Taylor Otwell',
+                            'email' => 'taylor@laravel.com',
+                        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertEquals(['message' => 'Hello World'], $response->original);
+        $this->assertEquals('Taylor Otwell', StandaloneAction::$appliedFields[0]->name);
+        $this->assertEquals('taylor@laravel.com', StandaloneAction::$appliedFields[0]->email);
+    }
+
     public function test_actions_support_redirects()
     {
         $user = factory(User::class)->create();
@@ -126,7 +146,10 @@ class ActionControllerTest extends IntegrationTest
                             'callback' => '',
                         ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'test' => 'The Test field is required.',
+            ]);
     }
 
     public function test_action_cant_be_applied_if_not_authorized_to_update_resource()
@@ -688,5 +711,50 @@ class ActionControllerTest extends IntegrationTest
 
         $response->assertStatus(200);
         $this->assertEquals(['message' => 'Processed 201 records'], $response->original);
+    }
+
+    public function test_actions_use_proper_sql_on_matching_resources()
+    {
+        $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+
+        DB::enableQueryLog();
+        DB::flushQueryLog();
+
+        $response = $this->withExceptionHandling()
+                        ->post('/nova-api/users/action?action='.(new NoopAction)->uriKey(), [
+                            'resources' => implode(',', [$user->id, $user2->id]),
+                            'test' => 'Taylor Otwell',
+                            'callback' => '',
+                        ]);
+
+        $queryLog = DB::getQueryLog()[0];
+
+        $this->assertSame(
+            'select * from "users" where "users"."id" in (?, ?) order by "users"."id" desc limit 200 offset 0',
+            $queryLog['query']
+        );
+    }
+
+    public function test_actions_use_proper_sql_on_matching_all_resources()
+    {
+        $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+
+        DB::enableQueryLog();
+
+        $response = $this->withExceptionHandling()
+                        ->post('/nova-api/users/action?action='.(new NoopAction)->uriKey(), [
+                            'resources' => 'all',
+                            'test' => 'Taylor Otwell',
+                            'callback' => '',
+                        ]);
+
+        $queryLog = DB::getQueryLog()[0];
+
+        $this->assertSame(
+            'select * from "users" where "users"."deleted_at" is null order by "users"."id" desc limit 200 offset 0',
+            $queryLog['query']
+        );
     }
 }

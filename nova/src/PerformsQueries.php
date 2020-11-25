@@ -12,7 +12,7 @@ trait PerformsQueries
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $search
+     * @param  string|null  $search
      * @param  array  $filters
      * @param  array  $orderings
      * @param  string  $withTrashed
@@ -23,7 +23,7 @@ trait PerformsQueries
                                       $withTrashed = TrashedStatus::DEFAULT)
     {
         return static::applyOrderings(static::applyFilters(
-            $request, static::initializeQuery($request, $query, $search, $withTrashed), $filters
+            $request, static::initializeQuery($request, $query, (string) $search, $withTrashed), $filters
         ), $orderings)->tap(function ($query) use ($request) {
             static::indexQuery($request, $query->with(static::$with));
         });
@@ -61,21 +61,25 @@ trait PerformsQueries
         return $query->where(function ($query) use ($search) {
             $model = $query->getModel();
 
-            $connectionType = $query->getModel()->getConnection()->getDriverName();
+            $connectionType = $model->getConnection()->getDriverName();
 
-            $canSearchPrimaryKey = is_numeric($search) &&
-                                   in_array($query->getModel()->getKeyType(), ['int', 'integer']) &&
-                                   ($connectionType != 'pgsql' || $search <= PHP_INT_MAX) &&
-                                   in_array($query->getModel()->getKeyName(), static::$search);
+            $canSearchPrimaryKey = ctype_digit($search) &&
+                                   in_array($model->getKeyType(), ['int', 'integer']) &&
+                                   ($connectionType != 'pgsql' || $search <= static::maxPrimaryKeySize()) &&
+                                   in_array($model->getKeyName(), static::$search);
 
             if ($canSearchPrimaryKey) {
-                $query->orWhere($query->getModel()->getQualifiedKeyName(), $search);
+                $query->orWhere($model->getQualifiedKeyName(), $search);
             }
 
             $likeOperator = $connectionType == 'pgsql' ? 'ilike' : 'like';
 
             foreach (static::searchableColumns() as $column) {
-                $query->orWhere($model->qualifyColumn($column), $likeOperator, '%'.$search.'%');
+                $query->orWhere(
+                    $model->qualifyColumn($column),
+                    $likeOperator,
+                    static::searchableKeyword($column, $search)
+                );
             }
         });
     }
@@ -95,7 +99,7 @@ trait PerformsQueries
             static::newModel()->search($search), $withTrashed
         ), function ($scoutBuilder) use ($request) {
             static::scoutQuery($request, $scoutBuilder);
-        })->take(static::$globalSearchResults)->get()->map->getKey();
+        })->take(static::$scoutSearchResults)->get()->map->getKey();
 
         return static::applySoftDeleteConstraint(
             $query->whereIn(static::newModel()->getQualifiedKeyName(), $keys->all()), $withTrashed

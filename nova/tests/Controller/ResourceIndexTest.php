@@ -386,7 +386,7 @@ class ResourceIndexTest extends IntegrationTest
         DB::flushQueryLog();
 
         // Eager-loading of the comment's author relation is not enabled.
-        $response = $this->withExceptionHandling()
+        $response = $this->withoutExceptionHandling()
             ->getJson('/nova-api/comments');
 
         $response->assertStatus(200);
@@ -514,5 +514,20 @@ class ResourceIndexTest extends IntegrationTest
 
         $this->assertEquals('tight', $resource['tableStyle']);
         unset($_SERVER['nova.users.tableStyle']);
+    }
+
+    public function test_resource_fields_are_not_duplicated_on_index()
+    {
+        $_SERVER['nova.showDuplicateField'] = true;
+
+        factory(User::class)->create();
+
+        $response = $this->withoutExceptionHandling()
+            ->getJson('/nova-api/user-with-custom-fields')
+            ->assertOk();
+
+        $this->assertCount(1, collect($response->original['resources'][0]['fields'])->where('attribute', 'name'));
+
+        unset($_SERVER['nova.showDuplicateField']);
     }
 }

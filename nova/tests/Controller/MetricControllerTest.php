@@ -280,7 +280,6 @@ class MetricControllerTest extends IntegrationTest
 
         $post = Post::find(2);
         $post->word_count = 50;
-        $post->created_at = now()->setTime(1, 0, 0);
         $post->save();
 
         $response = $this->withExceptionHandling()
