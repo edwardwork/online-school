@@ -33,7 +33,7 @@ class Answer extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'text',
     ];
 
     /**

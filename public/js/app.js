@@ -2022,6 +2022,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "question-manager",
   data: function data() {
@@ -37867,6 +37868,13 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("p", { staticClass: "rem-3" }, [_vm._v(_vm._s(_vm.question.text))]),
+    _vm._v(" "),
+    _vm.question.image_url
+      ? _c("img", {
+          staticClass: "w-100",
+          attrs: { src: "/storage/" + _vm.question.image_url, alt: "" }
+        })
+      : _vm._e(),
     _vm._v(" "),
     _c(
       "div",

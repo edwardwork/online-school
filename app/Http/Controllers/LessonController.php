@@ -18,7 +18,16 @@ class LessonController extends Controller
         $lesson = Lesson::with(['questions.answers', 'topic'])->find($lesson_id);
         $questions = $lesson->questions;
         $answers = $lesson->questions->pluck('answers')->flatten();
-        $lesson_status = UserStatus::where(['lesson_id' => $lesson->id, 'user_id' => $user->id])->first();
+        $lesson_status = UserStatus::firstOrCreate(
+            [
+                'lesson_id' => $lesson->id,
+                'user_id' => $user->id
+            ],
+            [
+                'question_ids' => implode(' ', $questions->pluck('id')->toArray()),
+                'current_position' => -1,
+            ]
+        );
 
         return view('layouts.lessons.show')
             ->with([

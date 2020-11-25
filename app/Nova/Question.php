@@ -32,7 +32,7 @@ class Question extends Resource
      * @var array
      */
     public static $search = [
-        'title',
+        'text',
     ];
 
     /**
@@ -47,7 +47,7 @@ class Question extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Text::make('Title', 'text'),
             Number::make('Type', 'type'),
-            Image::make('Image', 'photo'),
+            Image::make('Image', 'image_url'),
             BelongsTo::make('Lesson')
         ];
     }

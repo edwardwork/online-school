@@ -1,6 +1,7 @@
 <template>
     <div>
         <p class="rem-3">{{ question.text }}</p>
+        <img v-if="question.image_url" :src="'/storage/'+question.image_url" alt="" class="w-100">
         <div class="text-left">
             <div v-for="(answer, index) in question.answers">
                 <input :id="index + '_'" type='checkbox' @click="handleCheckbox" class="mt-4 mr-2" :value='answer.id'>
