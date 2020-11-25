@@ -3,7 +3,12 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Answer extends Resource
@@ -20,7 +25,7 @@ class Answer extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'text';
 
     /**
      * The columns that should be searched.
@@ -41,6 +46,11 @@ class Answer extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('Title', 'text'),
+            Number::make('Order', 'order_number'),
+            Image::make('Image', 'image_url'),
+            Boolean::make('is_true'),
+            BelongsTo::make('Question'),
         ];
     }
 
