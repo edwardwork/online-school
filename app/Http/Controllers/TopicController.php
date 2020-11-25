@@ -15,6 +15,7 @@ class TopicController extends Controller
 
     public function show(Topic $topic)
     {
+        $topic->load('lessons');
         return view('layouts.lessons.index', compact('topic'));
     }
 }

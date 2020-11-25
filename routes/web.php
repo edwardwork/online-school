@@ -13,62 +13,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::view('/', 'index')->name('home');
+
+Route::redirect('/home', '/');
+
+Route::group(['prefix' => 'topics', 'middleware' => 'auth'], function () {
+    Route::get('/', 'TopicController@index')->name('topics.list');
+    Route::get('/{topic}', 'TopicController@show')->name('topics.show');
 });
 
-Route::group(['prefix' => 'topics'], function () {
-
-    Route::get('/', 'TopicController@index')->name('list_topics');
-
-    Route::get('/create', 'TopicController@create');
-
-    Route::get('/edit/{topic}', 'TopicController@edit');
-
-    Route::get('/{topic}', 'TopicController@show')->name('show_topic');
-
-    Route::post('/', 'TopicController@store');
-
-    Route::put('/{topic}', 'TopicController@update');
-
-    Route::delete('/{topic}', 'TopicController@destroy');
-
-});
-
-Route::group(['prefix' => 'lessons'], function () {
-
+Route::group(['prefix' => 'lessons', 'middleware' => 'auth'], function () {
     Route::post('/getQuestionsAndAnswers', 'LessonController@getQuestionsAndAnswers')->name('loadData');
-
     Route::get('/create/{topic_id}', 'LessonController@create');
-
-    Route::get('/{lesson_id}', 'LessonController@show')->name('show_lesson');
-
+    Route::get('/{lesson_id}', 'LessonController@show')->name('lessons.show');
     Route::post('/', 'LessonController@store');
-
     Route::put('/{lesson}', 'LessonController@update');
-
     Route::delete('/{lesson}', 'LessonController@destroy');
-
 });
 
 Route::group(['prefix' => 'userStatus'], function () {
-
     Route::post('/', 'UserStatusController@store');
-
     Route::post('/update', 'UserStatusController@update');
-
     Route::post('/updateDuration', 'UserStatusController@updateDuration');
-
 });
 
 Route::group(['prefix' => 'categories'], function () {
-
     Route::get('/{category}', 'CategoryController@show');
-
 });
 
 Route::get('/introduction', 'IntroductionVideoController@index');
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

@@ -1,50 +1,35 @@
-@extends('layouts.app')
+@extends('layouts.main')
+
+@section('breadcrumbs', Breadcrumbs::render('lesson', $lesson))
 
 @section('content')
-	<div id="application">
-		<div class="container">
+	<div>
+        <div class="text-center mt-8">
 
-			<nav aria-label="breadcrumb">
-				<ol class="breadcrumb" style="font-size: 1.5rem;">
-					<li class="breadcrumb-item"><a href="/">Главная</a></li>
-					<li class="breadcrumb-item"><a href="{{ route('list_topics') }}">Темы</a></li>
-					<li class="breadcrumb-item"><a href="{{ route('show_topic', ['topic' => $topic->id]) }}">{{ $topic->name }}</a></li>
-					<li class="breadcrumb-item active" aria-current="page">{{ $lesson->name }}</li>
-				</ol>
-			</nav>
+            @if(!empty($status))
+                @if ($status->canWatchVideo())
+                    <vimeo-video-iframe id={{ $lesson->video_id }}></vimeo-video-iframe>
+                @else
+                    <h1 class="text-center text-5xl">Просмотр даного видео не доступен :(</h1>
+                @endif
+            @endif
 
-			<div class="text-center">
+            <div class="border-b border-white pb-4 mt-8 text-5xl">
+                <a href="{{ asset('storage/'.$lesson->pdf_url) }}" target="_blank" class="alert-link">
+                    <div class="text-5xl bg-indigo-300 border rounded-full px-4 py-2" role="alert">
+                        Открыть методичку
+                    </div>
+                </a>
+            </div>
 
-				@if(!empty($status))
-					@if ($status->canWatchVideo())
-						<span>
-							<br>
-                        	<br>
-							<vimeo-video-iframe id={{ $lesson->video_id }}></vimeo-video-iframe>
-						</span>
-					@else
-						<h1>Просмотр даного видео не доступен :(</h1>
-					@endif
-				@endif
+        </div>
 
-				<div>
-					<a href="{{ asset('storage/'.$lesson->pdf_url) }}" target="_blank" class="alert-link" style="font-size: 1.8rem;">
-						<div class="alert alert-primary" role="alert">
-							Открыть методичку
-						</div>
-					</a>
-				</div>
+        <module-for-testing
+                :status="{{ $status }}"
+                :questions="{{ $questions }}"
+                :answers="{{ $answers }}">
 
-			</div>
-
-			<module-for-testing
-					:status="{{ $status }}"
-					:questions="{{ $questions }}"
-					:answers="{{ $answers }}">
-
-			</module-for-testing>
-
-		</div>
+        </module-for-testing>
 	</div>
 @endsection
 
@@ -137,134 +122,133 @@
         //     $('#question_content').html(template);
         // }
 
-        $(document).ready(function () {
+        {{--$(document).ready(function () {--}}
 
-            // Для того чтобы не делать после каждого ответа пользователя на вопрос запрос к серверу и не нагружать БД,
-            // будем сохранять состояние теста в localStorage
-            localStorage.removeItem('true_answers');
-            localStorage.setItem('true_answers', 0);
+        {{--    // Для того чтобы не делать после каждого ответа пользователя на вопрос запрос к серверу и не нагружать БД,--}}
+        {{--    // будем сохранять состояние теста в localStorage--}}
+        {{--    localStorage.removeItem('true_answers');--}}
+        {{--    localStorage.setItem('true_answers', 0);--}}
 
-            // В этом блоке узнаем, lesson_id из URL
-            let url = window.location.href;
-            let parts_url = url.split('/');
-            let lesson_id = parts_url[parts_url.length-1];
+        {{--    // В этом блоке узнаем, lesson_id из URL--}}
+        {{--    let url = window.location.href;--}}
+        {{--    let parts_url = url.split('/');--}}
+        {{--    let lesson_id = parts_url[parts_url.length-1];--}}
 
-            // Обьявление переменных для работы
-            let response;
-            let questions = null;
-            let current_position = -1;
-            let array_id_of_questions = [];
-            let ordered_selected_answers = [];
-
-
-            {{--$.ajax({--}}
-            {{--    url: "{{ url('/userStatus') }}",--}}
-            {{--    type: "POST",--}}
-            {{--    data: {"lesson_id" : lesson_id},--}}
-            {{--    success: function (data) {--}}
-            {{--        console.log(data, '12');--}}
-            {{--        array_id_of_questions = data["data"].question_ids.split(' ').map(x => parseInt(x));--}}
-
-            {{--        response = data["data"];--}}
-
-            {{--        current_position = data["data"].current_position === -1 ? 0 : data["data"].current_position;--}}
-
-            {{--        $.ajax({--}}
-            {{--            url: "{{ url('/lessons/getQuestionsAndAnswers') }}",--}}
-            {{--            type: "POST",--}}
-            {{--            data: {"lesson_id" : lesson_id},--}}
-            {{--            success: function (data) {--}}
-            {{--                console.log(data)--}}
-            {{--                questions = data["data"].questions;--}}
-            {{--            }--}}
-            {{--        })--}}
-
-            {{--    }--}}
-            {{--});--}}
-
-            // По клику на "Приступить к тесту" вызываем функцию renderQuestion
-            // $('#start_test').click(function () {
-            //     renderQuestion(questions, array_id_of_questions, current_position, response);
-            // });
+        {{--    // Обьявление переменных для работы--}}
+        {{--    let response;--}}
+        {{--    let questions = null;--}}
+        {{--    let current_position = -1;--}}
+        {{--    let array_id_of_questions = [];--}}
+        {{--    let ordered_selected_answers = [];--}}
 
 
-            $(document).click(function (e) {
+        {{--    --}}{{--$.ajax({--}}
+        {{--    --}}{{--    url: "{{ url('/userStatus') }}",--}}
+        {{--    --}}{{--    type: "POST",--}}
+        {{--    --}}{{--    data: {"lesson_id" : lesson_id},--}}
+        {{--    --}}{{--    success: function (data) {--}}
+        {{--    --}}{{--        console.log(data, '12');--}}
+        {{--    --}}{{--        array_id_of_questions = data["data"].question_ids.split(' ').map(x => parseInt(x));--}}
 
-                // Если у нас вопрос первого типа, то делаем возможным выбор только 1 елемента
-                if(e.target.className === 'type_1')
-                {
-                    $('#type_1 input:checkbox').each(function () {
-                        $(this).prop('checked', false);
-                    });
-                    e.target.checked = true;
-                }
-                if(e.target.className === 'type_3')
-                {
-                    if(e.target.checked) {
-                        ordered_selected_answers.push(e.target.value);
-                    } else{
-                        ordered_selected_answers.splice(ordered_selected_answers.findIndex(x => x === e.target.value), 1);
-                    }
+        {{--    --}}{{--        response = data["data"];--}}
 
-                    $("#example_answer").html(`<p>Ваш ответ будет принят, как: </p>`);
-                    $("#example_answer").append(ordered_selected_answers.map((el, index) => {if(index != 2) return el+=' => '; else {return el} }));
-                }
-                // Если мы нажали, следующий вопрос
-                if(e.target.id === 'get_next') {
+        {{--    --}}{{--        current_position = data["data"].current_position === -1 ? 0 : data["data"].current_position;--}}
 
-                    localStorage.setItem('true_answers', 0);
+        {{--    --}}{{--        $.ajax({--}}
+        {{--    --}}{{--            url: "{{ url('/lessons/getQuestionsAndAnswers') }}",--}}
+        {{--    --}}{{--            type: "POST",--}}
+        {{--    --}}{{--            data: {"lesson_id" : lesson_id},--}}
+        {{--    --}}{{--            success: function (data) {--}}
+        {{--    --}}{{--                console.log(data)--}}
+        {{--    --}}{{--                questions = data["data"].questions;--}}
+        {{--    --}}{{--            }--}}
+        {{--    --}}{{--        })--}}
 
-                    let current_question = questions.find(x => x.id === array_id_of_questions[current_position]);
-                    let array_true_answers = current_question.answers.filter(x => x.is_true === 1);
-                    let count_true_answers = array_true_answers.length;
-                    let count_selected_answers = $(".answers input:checkbox:checked").length;
-                    let selected_answers = [];
+        {{--    --}}{{--    }--}}
+        {{--    --}}{{--});--}}
 
-                    // Сохраняем в массив, все выбранные нами значения
-                    for (let i = 0;i < $(".answers input:checkbox:checked").length;i++)
-                    {
-                        selected_answers.push($(".answers input:checkbox:checked")[i].value);
-                    }
+        {{--    // По клику на "Приступить к тесту" вызываем функцию renderQuestion--}}
+        {{--    // $('#start_test').click(function () {--}}
+        {{--    //     renderQuestion(questions, array_id_of_questions, current_position, response);--}}
+        {{--    // });--}}
 
-                    // Если кол-во правильных и отмеченных ответов совпадает + все правильные присутствуют в ответе
-                    if(array_true_answers.every(x => selected_answers.indexOf(x.text) > -1)
-                        && (count_true_answers === count_selected_answers)) {
 
-                        if(current_question.type === 3) {
-                            if(array_true_answers.every(el => Number(el.order_number) === Number(ordered_selected_answers[el.order_number-1]))) {
-                                localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);
-                            }
-                        } else {
-                            localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);
-                        }
-                    }
-                    current_position+=1;
+        {{--    $(document).click(function (e) {--}}
 
-                    $.ajax({
-                        url: "{{ url('/userStatus/update') }}",
-                        type: "POST",
-                        data: {"lesson_id" : lesson_id,
-                            "count_true_answers" : Number(localStorage.getItem('true_answers')),
-                            "current_position" : current_position,
-                            "array_positions" : ordered_selected_answers
-                        },
-                        success: function (data) {
-                            response = data["data"];
+        {{--        // Если у нас вопрос первого типа, то делаем возможным выбор только 1 елемента--}}
+        {{--        if(e.target.className === 'type_1')--}}
+        {{--        {--}}
+        {{--            $('#type_1 input:checkbox').each(function () {--}}
+        {{--                $(this).prop('checked', false);--}}
+        {{--            });--}}
+        {{--            e.target.checked = true;--}}
+        {{--        }--}}
+        {{--        if(e.target.className === 'type_3')--}}
+        {{--        {--}}
+        {{--            if(e.target.checked) {--}}
+        {{--                ordered_selected_answers.push(e.target.value);--}}
+        {{--            } else{--}}
+        {{--                ordered_selected_answers.splice(ordered_selected_answers.findIndex(x => x === e.target.value), 1);--}}
+        {{--            }--}}
 
-                            renderQuestion(questions, array_id_of_questions, current_position, response);
-                        }
-                    });
+        {{--            $("#example_answer").html(`<p>Ваш ответ будет принят, как: </p>`);--}}
+        {{--            $("#example_answer").append(ordered_selected_answers.map((el, index) => {if(index != 2) return el+=' => '; else {return el} }));--}}
+        {{--        }--}}
+        {{--        // Если мы нажали, следующий вопрос--}}
+        {{--        if(e.target.id === 'get_next') {--}}
 
-                }
-            });
-        });
+        {{--            localStorage.setItem('true_answers', 0);--}}
+
+        {{--            let current_question = questions.find(x => x.id === array_id_of_questions[current_position]);--}}
+        {{--            let array_true_answers = current_question.answers.filter(x => x.is_true === 1);--}}
+        {{--            let count_true_answers = array_true_answers.length;--}}
+        {{--            let count_selected_answers = $(".answers input:checkbox:checked").length;--}}
+        {{--            let selected_answers = [];--}}
+
+        {{--            // Сохраняем в массив, все выбранные нами значения--}}
+        {{--            for (let i = 0;i < $(".answers input:checkbox:checked").length;i++)--}}
+        {{--            {--}}
+        {{--                selected_answers.push($(".answers input:checkbox:checked")[i].value);--}}
+        {{--            }--}}
+
+        {{--            // Если кол-во правильных и отмеченных ответов совпадает + все правильные присутствуют в ответе--}}
+        {{--            if(array_true_answers.every(x => selected_answers.indexOf(x.text) > -1)--}}
+        {{--                && (count_true_answers === count_selected_answers)) {--}}
+
+        {{--                if(current_question.type === 3) {--}}
+        {{--                    if(array_true_answers.every(el => Number(el.order_number) === Number(ordered_selected_answers[el.order_number-1]))) {--}}
+        {{--                        localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);--}}
+        {{--                    }--}}
+        {{--                } else {--}}
+        {{--                    localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);--}}
+        {{--                }--}}
+        {{--            }--}}
+        {{--            current_position+=1;--}}
+
+        {{--            $.ajax({--}}
+        {{--                url: "{{ url('/userStatus/update') }}",--}}
+        {{--                type: "POST",--}}
+        {{--                data: {"lesson_id" : lesson_id,--}}
+        {{--                    "count_true_answers" : Number(localStorage.getItem('true_answers')),--}}
+        {{--                    "current_position" : current_position,--}}
+        {{--                    "array_positions" : ordered_selected_answers--}}
+        {{--                },--}}
+        {{--                success: function (data) {--}}
+        {{--                    response = data["data"];--}}
+
+        {{--                    renderQuestion(questions, array_id_of_questions, current_position, response);--}}
+        {{--                }--}}
+        {{--            });--}}
+
+        {{--        }--}}
+        {{--    });--}}
+        {{--});--}}
 
 	</script>
 @endpush
 
-
-@push('script')
-	<script src="{{ asset('js/lesson.js') }}"></script>
+@push('scripts')
+	<script src="{{ mix('js/app.js') }}"></script>
 @endpush
 
 <style>
@@ -321,13 +305,4 @@
 			margin-top: 10px;
 		}
 	}
-
-	/*Medium devices (tablets, 768px and up)*/
-	@media (min-width: 768px) and (max-width: 991.98px) {  }
-
-	/* Large devices (desktops, 992px and up)*/
-	@media (min-width: 992px) and (max-width: 1199.98px) {  }
-
-	/* Extra large devices (large desktops, 1200px and up)*/
-	@media (min-width: 1200px) {  }
 </style>

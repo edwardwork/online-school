@@ -1,29 +1,17 @@
-@extends('layouts.app')
+@extends('layouts.main')
+
+@section('breadcrumbs', Breadcrumbs::render('topics'))
 
 @section('content')
 
-	<div class="container">
-
-		<nav aria-label="breadcrumb">
-			<ol class="breadcrumb" style="font-size: 1.5rem;">
-				<li class="breadcrumb-item"><a href="/">Главная</a></li>
-				<li class="breadcrumb-item active" aria-current="page">Темы</li>
-			</ol>
-		</nav>
-
-		<div class="card-deck">
-
-			@foreach($topics as $topic)
-				<div>
-					<div class="card " style="width: 18rem;">
-						<div class="card-body">
-							<h5 class="card-title" style="font-size: 3rem;">{{ $topic->name }}</h5>
-							<a href="/topics/{{ $topic->id }}" style="font-size: 1.8rem;" class="btn btn-primary">Список уроков</a>
-						</div>
-					</div>
-				</div>
-			@endforeach
-		</div>
+	<div class="px-4">
+        @foreach($topics as $topic)
+            <a href="{{ route('topics.show', ['topic' => $topic->id]) }}" class="text-5xl text-center">
+                <div class="border border-white p-4 mt-4">
+                    <h5>{{ $topic->name }}</h5>
+                </div>
+            </a>
+        @endforeach
 	</div>
 
 @endsection

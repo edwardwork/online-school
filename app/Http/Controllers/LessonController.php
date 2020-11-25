@@ -15,7 +15,7 @@ class LessonController extends Controller
     public function show(int $lesson_id)
     {
         $user = \Auth::user();
-        $lesson = Lesson::with(['questions.answers', 'topic'])->find($lesson_id);
+        $lesson = Lesson::with(['questions.answers', 'topic'])->findOrFail($lesson_id);
         $questions = $lesson->questions;
         $answers = $lesson->questions->pluck('answers')->flatten();
         $lesson_status = UserStatus::where(['lesson_id' => $lesson->id, 'user_id' => $user->id])->first();
