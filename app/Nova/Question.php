@@ -4,9 +4,11 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -46,9 +48,14 @@ class Question extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make('Title', 'text'),
-            Number::make('Type', 'type'),
+            Select::make('Type', 'type')->options([
+                '1' => 'Один правильный ответ',
+                '2' => 'Несколько правильных ответов',
+                '3' => 'Важна последовательность',
+            ]),
             Image::make('Image', 'image_url'),
-            BelongsTo::make('Lesson')
+            BelongsTo::make('Lesson'),
+            HasMany::make('Answers', 'answers', 'App\Nova\Answer')
         ];
     }
 

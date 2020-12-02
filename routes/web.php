@@ -60,12 +60,6 @@ Route::group(['prefix' => 'userStatus', 'middleware' => 'auth'], function () {
 
 });
 
-Route::group(['prefix' => 'categories', 'middleware' => 'auth'], function () {
-
-    Route::get('/{category}', 'CategoryController@show');
-
-});
-
 Route::get('/introduction', 'IntroductionVideoController@index');
 
 Auth::routes();

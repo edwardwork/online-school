@@ -5,6 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\File;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -47,7 +48,8 @@ class Lesson extends Resource
             Text::make('Title', 'name'),
             Text::make('Vimeo ID', 'video_id'),
             File::make('PDF File', 'pdf_url'),
-            BelongsTo::make('Topic', 'topic', 'App\Nova\Topic')
+            BelongsTo::make('Topic', 'topic', 'App\Nova\Topic'),
+            HasMany::make('Questions', 'questions', 'App\Nova\Question')
         ];
     }
 
