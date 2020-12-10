@@ -16,6 +16,9 @@ class LessonController extends Controller
     {
         $user = \Auth::user();
         $lesson = Lesson::with(['questions.answers', 'topic'])->find($lesson_id);
+        if(!\Bouncer::can('read', $lesson)) {
+            throw new \Exception('По вашей подписке не возможно получить доступ к этому уроку');
+        }
 
         $questions = $lesson->questions;
         if($questions->isEmpty()) {
