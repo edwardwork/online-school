@@ -15,7 +15,14 @@ class LessonObserver
      */
     public function created(Lesson $lesson)
     {
-        //
+        $subscription = $lesson->subscription;
+        if($subscription) {
+            $users = User::where('subscription_id', $subscription->id)->get();
+
+            foreach ($users as $user) {
+                \Bouncer::allow($user)->to('read', $lesson);
+            }
+        }
     }
 
     /**
@@ -28,13 +35,10 @@ class LessonObserver
     {
         $subscription = $lesson->subscription;
         if($subscription) {
-            $lessons = $subscription->lessons;
             $users = User::where('subscription_id', $subscription->id)->get();
 
             foreach ($users as $user) {
-                foreach ($lessons as $lesson) {
-                    \Bouncer::allow($user)->to('read', $lesson);
-                }
+                \Bouncer::allow($user)->to('read', $lesson);
             }
         }
     }
@@ -47,7 +51,14 @@ class LessonObserver
      */
     public function deleted(Lesson $lesson)
     {
-        //
+        $subscription = $lesson->subscription;
+        if($subscription) {
+            $users = User::where('subscription_id', $subscription->id)->get();
+
+            foreach ($users as $user) {
+                \Bouncer::disallow($user)->to('read', $lesson);
+            }
+        }
     }
 
     /**
