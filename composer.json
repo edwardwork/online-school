@@ -16,7 +16,8 @@
         "laravel/framework": "^7.22.2",
         "laravel/nova": "*",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^2.1"
+        "laravel/ui": "^2.1",
+        "silber/bouncer": "v1.0.0-rc.9"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

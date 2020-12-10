@@ -49,6 +49,7 @@ class Lesson extends Resource
             Text::make('Vimeo ID', 'video_id'),
             File::make('PDF File', 'pdf_url'),
             BelongsTo::make('Topic', 'topic', 'App\Nova\Topic'),
+            BelongsTo::make('Subscription', 'subscription', 'App\Nova\Subscription'),
             HasMany::make('Questions', 'questions', 'App\Nova\Question')
         ];
     }
