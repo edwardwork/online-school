@@ -1974,11 +1974,22 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
+    localStorage.setItem('true_answers', this.status.count_true_answers ? 0 : this.status.count_true_answers);
     this.current_position = this.status.current_position == -1 ? 0 : this.status.current_position;
     this.testIsOver = this.status.is_success;
     this.testIsClosed = this.status.attempt == this.status.max_attempt;
     this.shuffle(this.questions);
-    Event.listen('next-question', function () {
+    Event.listen('next-question', function (obj) {
+      if (obj.isCorrectAnswer) {
+        localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);
+      }
+
+      axios.post('/userStatus/update', {
+        'lesson_id': _this.questions[0].lesson_id,
+        'count_true_answers': Number(localStorage.getItem('true_answers')),
+        'current_position': _this.current_position + 1
+      });
+
       if (_this.questions.length - 1 == _this.current_position) {
         _this.showQuestions = false;
         _this.testIsOver = true;
@@ -2063,12 +2074,31 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     sendAnswer: function sendAnswer() {
+      var _this = this;
+
       if (this.userAnswer.size > 0) {
         document.querySelectorAll("input[type='checkbox']").forEach(function (item) {
           item.checked = false;
         });
+        var isCorrectAnswer = false;
+        var trueAnswers = this.question.answers.filter(function (x) {
+          return x.is_true;
+        });
+
+        if (this.userAnswer.size == trueAnswers.length) {
+          var flag = true;
+          trueAnswers.map(function (x) {
+            if (!_this.userAnswer.has(String(x.id))) {
+              flag = false;
+            }
+          });
+          isCorrectAnswer = flag;
+        }
+
+        Event.fire('next-question', {
+          isCorrectAnswer: isCorrectAnswer
+        });
         this.userAnswer = new Set();
-        Event.fire('next-question');
       }
     }
   }
@@ -37798,9 +37828,7 @@ var render = function() {
         _vm._v(" "),
         _vm.testIsOver
           ? _c("p", { staticClass: "rem-3" }, [
-              _vm._v(
-                "\n            Тест сдан, результаты будут известны в ближайшем будущем :)\n        "
-              )
+              _vm._v("\n            Тест сдан :)\n        ")
             ])
           : _vm._e(),
         _vm._v(" "),
@@ -37812,17 +37840,11 @@ var render = function() {
             ])
           : _vm._e(),
         _vm._v(" "),
-        _c("question-manager", {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.showQuestions,
-              expression: "showQuestions"
-            }
-          ],
-          attrs: { question: _vm.questions[_vm.current_position] }
-        })
+        _vm.showQuestions
+          ? _c("question-manager", {
+              attrs: { question: _vm.questions[_vm.current_position] }
+            })
+          : _vm._e()
       ],
       1
     ),
@@ -37834,8 +37856,8 @@ var render = function() {
           {
             name: "show",
             rawName: "v-show",
-            value: _vm.status,
-            expression: "status"
+            value: _vm.status && !_vm.testIsOver,
+            expression: "status && !testIsOver"
           }
         ],
         staticClass: "card-footer text-muted"

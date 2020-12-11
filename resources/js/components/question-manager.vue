@@ -60,8 +60,20 @@ export default {
                 document.querySelectorAll("input[type='checkbox']").forEach(item => {
                     item.checked = false;
                 })
+                let isCorrectAnswer = false;
+                let trueAnswers = this.question.answers.filter(x => x.is_true);
+                if(this.userAnswer.size == trueAnswers.length) {
+                    let flag = true;
+                    trueAnswers.map(x => {
+                        if(!this.userAnswer.has(String(x.id))) {
+                            flag=false;
+                        }
+                    })
+                    isCorrectAnswer = flag;
+                }
+                Event.fire('next-question', {isCorrectAnswer: isCorrectAnswer});
+
                 this.userAnswer = new Set();
-                Event.fire('next-question');
             }
         }
     }

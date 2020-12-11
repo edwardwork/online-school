@@ -11,16 +11,16 @@
             </button>
 
             <p v-if="testIsOver" class="rem-3">
-                Тест сдан, результаты будут известны в ближайшем будущем :)
+                Тест сдан :)
             </p>
 
             <p v-if="testIsClosed" class="rem-3">
                 Скорее всего, вы превысили количество попыток, выделенные для вас :(
             </p>
 
-            <question-manager v-show="showQuestions" :question="questions[current_position]"></question-manager>
+            <question-manager v-if="showQuestions" :question="questions[current_position]"></question-manager>
         </div>
-        <div class="card-footer text-muted" v-show="status">
+        <div class="card-footer text-muted" v-show="status && !testIsOver">
             {{ this.showCountAttempt() }}
         </div>
     </div>
@@ -57,12 +57,23 @@
             }
         },
         mounted() {
+            localStorage.setItem('true_answers', this.status.count_true_answers ? 0 : this.status.count_true_answers);
             this.current_position = this.status.current_position == -1 ? 0 : this.status.current_position;
             this.testIsOver = this.status.is_success;
             this.testIsClosed = this.status.attempt == this.status.max_attempt;
 
             this.shuffle(this.questions);
-            Event.listen('next-question', () => {
+
+            Event.listen('next-question', (obj) => {
+                if(obj.isCorrectAnswer) {
+                    localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);
+                }
+
+                axios.post('/userStatus/update', {
+                    'lesson_id': this.questions[0].lesson_id,
+                    'count_true_answers': Number(localStorage.getItem('true_answers')),
+                    'current_position': this.current_position + 1
+                })
                 if(this.questions.length - 1 == this.current_position) {
                     this.showQuestions = false;
                     this.testIsOver = true;

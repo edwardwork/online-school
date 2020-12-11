@@ -9,6 +9,10 @@ class UserStatus extends Model
 {
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'is_success' => "bool"
+    ];
+
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
