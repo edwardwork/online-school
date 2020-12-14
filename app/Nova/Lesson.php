@@ -47,7 +47,7 @@ class Lesson extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Text::make('Title', 'name'),
             Text::make('Vimeo ID', 'video_id'),
-            File::make('PDF File', 'pdf_url'),
+            File::make('PDF File', 'pdf_url')->nullable(),
             BelongsTo::make('Topic', 'topic', 'App\Nova\Topic'),
             BelongsTo::make('Subscription', 'subscription', 'App\Nova\Subscription'),
             HasMany::make('Questions', 'questions', 'App\Nova\Question')
