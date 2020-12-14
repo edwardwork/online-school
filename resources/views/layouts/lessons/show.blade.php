@@ -19,13 +19,15 @@
 					@endif
 				@endif
 
-				<div>
-					<a href="{{ asset('storage/'.$lesson->pdf_url) }}" target="_blank" class="alert-link rem-2">
-						<div class="alert alert-primary" role="alert">
-							Открыть методичку
-						</div>
-					</a>
-				</div>
+                @if(!is_null($lesson->pdf_url))
+                    <div>
+                        <a href="{{ asset('storage/'.$lesson->pdf_url) }}" target="_blank" class="alert-link rem-2">
+                            <div class="alert alert-primary" role="alert">
+                                Открыть методичку
+                            </div>
+                        </a>
+                    </div>
+                @endif
 
 			</div>
 

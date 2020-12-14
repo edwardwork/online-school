@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lesson;
-use App\Models\Question;
 use App\Models\UserStatus;
 use App\Services\ClassroomService;
 use Illuminate\Http\Request;

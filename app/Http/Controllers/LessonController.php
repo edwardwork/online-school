@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CheckAccessToLesson;
 use App\Models\Lesson;
 use App\Models\UserStatus;
 use App\Services\ClassroomService;
@@ -18,7 +19,7 @@ class LessonController extends Controller
     {
         $user = \Auth::user();
         $lesson = Lesson::with(['questions.answers', 'topic'])->find($lesson_id);
-        if(!\Bouncer::can('read', $lesson)) {
+        if(!CheckAccessToLesson::check($user, $lesson)) {
             throw new \Exception('По вашей подписке не возможно получить доступ к этому уроку');
         }
 

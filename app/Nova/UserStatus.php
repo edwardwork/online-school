@@ -3,7 +3,11 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Status;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class UserStatus extends Resource
@@ -41,6 +45,14 @@ class UserStatus extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            BelongsTo::make('User'),
+            BelongsTo::make('Lesson'),
+            Boolean::make('Success', 'is_success'),
+            Boolean::make('Has access'),
+            Number::make('Count true answers')->showOnIndex(),
+            Number::make('Attempt'),
+            Number::make('Max Attempt'),
+            Number::make('Threshold'),
         ];
     }
 

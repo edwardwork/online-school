@@ -10,7 +10,8 @@ class UserStatus extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'is_success' => "bool"
+        'is_success' => "bool",
+        'has_access' => "bool",
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

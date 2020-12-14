@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Subscription;
+use App\Models\UserStatus;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -42,5 +43,10 @@ class User extends Authenticatable
     public function subscription()
     {
         return $this->belongsTo(Subscription::class);
+    }
+
+    public function lessonStatuses()
+    {
+        return $this->hasMany(UserStatus::class);
     }
 }
