@@ -67,7 +67,6 @@ class UserStatusController extends Controller
 
         if($model->current_position >= count(explode(' ', $model->question_ids))) {
             $model->current_position = -1;
-            $model->count_true_answers = 0;
         }
 
         $model->save();
