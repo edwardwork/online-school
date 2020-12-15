@@ -6,33 +6,13 @@ use App\Helpers\CheckAccessToLesson;
 use App\Models\Lesson;
 use App\Models\UserStatus;
 use App\Services\ClassroomService;
-use Illuminate\Support\Facades\Auth;
 
 class LessonController extends Controller
 {
-    public function index()
-    {
-        //
-    }
-
     public function show(int $lesson_id)
     {
         $user = \Auth::user();
         $lesson = Lesson::with(['questions.answers', 'topic'])->find($lesson_id);
-        if(!CheckAccessToLesson::check($user, $lesson)) {
-            throw new \Exception('По вашей подписке не возможно получить доступ к этому уроку');
-        }
-
-        $questions = $lesson->questions;
-        if($questions->isEmpty()) {
-            throw new \Exception('Для этого урока не заданы вопросы');
-        }
-
-        $answers = $lesson->questions->pluck('answers')->flatten();
-        if($answers->isEmpty()) {
-            throw new \Exception('Для этого урока не заданы ответы на вопросы');
-        }
-
         $lesson_status = UserStatus::firstOrCreate(
             [
                 'lesson_id' => $lesson->id,
@@ -50,6 +30,20 @@ class LessonController extends Controller
                 'threshold' => 80
             ]
         );
+
+        if(!CheckAccessToLesson::check($user, $lesson)) {
+            throw new \Exception('По вашей подписке не возможно получить доступ к этому уроку');
+        }
+
+        $questions = $lesson->questions;
+        if($questions->isEmpty()) {
+            throw new \Exception('Для этого урока не заданы вопросы');
+        }
+
+        $answers = $lesson->questions->pluck('answers')->flatten();
+        if($answers->isEmpty()) {
+            throw new \Exception('Для этого урока не заданы ответы на вопросы');
+        }
 
         $questionIds = explode(" ", $lesson_status->question_ids);
         $sortedQuestions = [];

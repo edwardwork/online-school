@@ -7,7 +7,7 @@
 		<div class="container">
 			<div class="text-center">
 
-				@if(!empty($status))
+				@if(!empty($status) && !is_null($lesson->video_id))
 					@if ($status->canWatchVideo())
 						<span>
 							<br>
