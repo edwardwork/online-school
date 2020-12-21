@@ -37970,7 +37970,7 @@ var render = function() {
     attrs: {
       src: _vm.getVimeoVideoUrl,
       width: "100%",
-      height: "600px",
+      height: "300px",
       frameborder: "0",
       webkitallowfullscreen: "",
       mozallowfullscreen: "",

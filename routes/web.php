@@ -60,6 +60,14 @@ Route::group(['prefix' => 'userStatus', 'middleware' => 'auth'], function () {
 
 });
 
+Route::group(['prefix' => 'categories', 'middleware' => 'auth'], function () {
+
+    Route::get('/', 'HomeController@showCategories')->name("category.list");
+
+    Route::get('/{category}', 'HomeController@showCategory')->name("category.show");
+
+});
+
 Route::get('/introduction', 'IntroductionVideoController@index');
 
 Auth::routes();

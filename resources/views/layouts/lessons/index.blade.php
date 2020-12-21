@@ -7,7 +7,7 @@
 	<div class="container">
 
 		<div class="card-deck text-center">
-            <a href="{{ route('topics.list') }}" class="btn btn-primary rem-2 mb-4">К списку тем</a>
+            <a href="{{ route('category.list') }}" class="btn btn-primary rem-2 mb-4">К списку тем</a>
 
 			@foreach($topic->lessons as $lesson)
 				<div>

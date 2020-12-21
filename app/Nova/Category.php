@@ -43,7 +43,8 @@ class Category extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make("title")->sortable()
+            Text::make("title")->sortable(),
+            HasMany::make('Topics', 'topics', 'App\Nova\Topic')
         ];
     }
 

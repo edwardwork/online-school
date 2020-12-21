@@ -9,11 +9,7 @@
 
 				@if(!empty($status) && !is_null($lesson->video_id))
 					@if ($status->canWatchVideo())
-						<span>
-							<br>
-                        	<br>
-							<vimeo-video-iframe id={{ $lesson->video_id }}></vimeo-video-iframe>
-						</span>
+                        <vimeo-video-iframe id={{ $lesson->video_id }}></vimeo-video-iframe>
 					@else
 						<h1>Просмотр даного видео не доступен :(</h1>
 					@endif

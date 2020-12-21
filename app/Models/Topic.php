@@ -12,4 +12,9 @@ class Topic extends Model
     {
         return $this->hasMany(Lesson::class);
     }
+
+    public function category(): \Illuminate\Database\Eloquent\Relations\belongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

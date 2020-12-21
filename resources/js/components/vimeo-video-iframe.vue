@@ -1,7 +1,7 @@
 <template>
     <iframe :src="getVimeoVideoUrl"
             width="100%"
-            height="600px"
+            height="300px"
             frameborder="0"
             webkitallowfullscreen
             mozallowfullscreen

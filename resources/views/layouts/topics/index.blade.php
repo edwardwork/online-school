@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('breadcrumbs', Breadcrumbs::render('topics'))
+@section('breadcrumbs', Breadcrumbs::render('topics', $topics->first()))
 
 @section('content')
 

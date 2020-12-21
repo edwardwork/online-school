@@ -32,4 +32,9 @@ class Category extends Model
     {
         return $this->children()->count() === 0;
     }
+
+    public function topics(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Topic::class);
+    }
 }

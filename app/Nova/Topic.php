@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -43,6 +44,7 @@ class Topic extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make('Title', 'name')->sortable(),
+            BelongsTo::make('Category', 'category', 'App\Nova\Category'),
         ];
     }
 

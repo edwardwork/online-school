@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Lesson;
+use App\Models\UserStatus;
+use App\Services\ClassroomService;
 use App\User;
 
 class LessonObserver
@@ -23,6 +25,27 @@ class LessonObserver
                 \Bouncer::allow($user)->to('read', $lesson);
             }
         }
+
+        $users = User::all();
+        foreach ($users as $user) {
+            UserStatus::firstOrCreate(
+                [
+                    'lesson_id' => $lesson->id,
+                    'user_id' => $user->id
+                ],
+                [
+                    'question_ids' => ClassroomService::getRandomQuestionsForLessonsByFormat($lesson),
+                    'current_position' => -1,
+                    'attempt' => 0,
+                    'count_true_answers' => 0,
+                    'current_duration' => 0,
+                    'is_success' => false,
+                    'max_attempt' => 3,
+                    'max_duration' => 1000,
+                    'threshold' => 80
+                ]
+            );
+        }
     }
 
     /**
@@ -40,6 +63,26 @@ class LessonObserver
             foreach ($users as $user) {
                 \Bouncer::allow($user)->to('read', $lesson);
             }
+        }
+        $users = User::all();
+        foreach ($users as $user) {
+            UserStatus::firstOrCreate(
+                [
+                    'lesson_id' => $lesson->id,
+                    'user_id' => $user->id
+                ],
+                [
+                    'question_ids' => ClassroomService::getRandomQuestionsForLessonsByFormat($lesson),
+                    'current_position' => -1,
+                    'attempt' => 0,
+                    'count_true_answers' => 0,
+                    'current_duration' => 0,
+                    'is_success' => false,
+                    'max_attempt' => 3,
+                    'max_duration' => 1000,
+                    'threshold' => 80
+                ]
+            );
         }
     }
 
@@ -59,6 +102,7 @@ class LessonObserver
                 \Bouncer::disallow($user)->to('read', $lesson);
             }
         }
+        UserStatus::where('lesson_id', $lesson->id)->delete();
     }
 
     /**
