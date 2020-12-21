@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', '/topics');
-Route::redirect('/home', '/topics')->name('home');
+Route::redirect('/', '/categories');
+Route::redirect('/home', '/categories')->name('home');
 
 Route::group(['prefix' => 'topics', 'middleware' => 'auth'], function () {
 
