@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\UpdateUserStatuses;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Gravatar;
@@ -113,6 +114,8 @@ class User extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            new UpdateUserStatuses
+        ];
     }
 }
