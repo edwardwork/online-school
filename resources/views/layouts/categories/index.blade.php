@@ -11,7 +11,7 @@
                     <div class="card text-center">
                         <div class="card-body">
                             <h5 class="card-title rem-3">{{ $category->title }}</h5>
-                            <a href="{{ route('category.show', ['category' => $category->id]) }}" class="btn btn-primary rem-2">Список тем</a>
+                            <a href="{{ route('category.show', ['category' => $category->id]) }}" class="btn btn-primary rem-2">Topics</a>
                         </div>
                     </div>
                 </div>
