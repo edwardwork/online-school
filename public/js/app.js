@@ -2133,14 +2133,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         var trueAnswers = this.question.answers.filter(function (x) {
           return x.is_true;
         });
-        console.log(this.userAnswer, 'this.userAnswer');
-        console.log(trueAnswers, 'trueAnswers');
 
         if (this.userAnswer.size == trueAnswers.length) {
           var flag = true;
           trueAnswers.map(function (x) {
             if (!_this2.userAnswer.has(String(x.id))) {
-              console.log('IO');
               flag = false;
             }
           });
