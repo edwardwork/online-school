@@ -1987,6 +1987,8 @@ __webpack_require__.r(__webpack_exports__);
     this.testIsClosed = this.status.attempt >= this.status.max_attempt;
     this.shuffle(this.questions);
     Event.listen('next-question', function (obj) {
+      console.log(obj.isCorrectAnswer);
+
       if (obj.isCorrectAnswer) {
         localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);
       }
