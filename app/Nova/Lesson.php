@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\File;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -47,6 +48,7 @@ class Lesson extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Text::make('Title', 'name'),
             Text::make('Vimeo ID', 'video_id'),
+            Number::make('Question count', 'question_count'),
             File::make('PDF File', 'pdf_url')->nullable(),
             BelongsTo::make('Topic', 'topic', 'App\Nova\Topic'),
             BelongsTo::make('Subscription', 'subscription', 'App\Nova\Subscription'),
