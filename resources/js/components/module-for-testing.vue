@@ -76,16 +76,15 @@
                     localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);
                 }
 
+                if(this.questions.length - 1 == this.current_position) {
+                    this.showQuestions = false;
+                    this.testIsOver = true;
+                }
                 if(this.current_position == this.questions.length - 1) {
                     axios.post('/userStatus/update', {
                         'lesson_id': this.questions[0].lesson_id,
                         'count_true_answers': Number(localStorage.getItem('true_answers')),
                     })
-                }
-
-                if(this.questions.length - 1 == this.current_position) {
-                    this.showQuestions = false;
-                    this.testIsOver = true;
                 }
                 this.current_position++;
             })

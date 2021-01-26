@@ -1991,16 +1991,16 @@ __webpack_require__.r(__webpack_exports__);
         localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);
       }
 
+      if (_this.questions.length - 1 == _this.current_position) {
+        _this.showQuestions = false;
+        _this.testIsOver = true;
+      }
+
       if (_this.current_position == _this.questions.length - 1) {
         axios.post('/userStatus/update', {
           'lesson_id': _this.questions[0].lesson_id,
           'count_true_answers': Number(localStorage.getItem('true_answers'))
         });
-      }
-
-      if (_this.questions.length - 1 == _this.current_position) {
-        _this.showQuestions = false;
-        _this.testIsOver = true;
       }
 
       _this.current_position++;
