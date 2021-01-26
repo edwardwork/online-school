@@ -39,7 +39,15 @@ export default {
                     item.checked = false;
                 })
                 e.target.checked = true;
-                this.userAnswer = new Set(e.target.value);
+
+                if(e.target.checked == true) {
+                    this.userAnswer.clear();
+                    this.userAnswer.add(e.target.value);
+                }
+
+                if(e.target.checked == false) {
+                    this.userAnswer.delete(e.target.value);
+                }
             }
             if(this.question.type == 2) {
                 if(e.target.checked == true) {
