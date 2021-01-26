@@ -68,10 +68,13 @@ export default {
                 })
                 let isCorrectAnswer = false;
                 let trueAnswers = this.question.answers.filter(x => x.is_true);
+                console.log(this.userAnswer, 'this.userAnswer');
+                console.log(trueAnswers, 'trueAnswers');
                 if(this.userAnswer.size == trueAnswers.length) {
                     let flag = true;
                     trueAnswers.map(x => {
                         if(!this.userAnswer.has(String(x.id))) {
+                            console.log('IO')
                             flag=false;
                         }
                     })

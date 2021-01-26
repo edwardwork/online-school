@@ -72,7 +72,7 @@
             this.shuffle(this.questions);
 
             Event.listen('next-question', (obj) => {
-                console.log(obj.isCorrectAnswer);
+
                 if(obj.isCorrectAnswer) {
                     localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);
                 }

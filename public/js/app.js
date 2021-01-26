@@ -1987,8 +1987,6 @@ __webpack_require__.r(__webpack_exports__);
     this.testIsClosed = this.status.attempt >= this.status.max_attempt;
     this.shuffle(this.questions);
     Event.listen('next-question', function (obj) {
-      console.log(obj.isCorrectAnswer);
-
       if (obj.isCorrectAnswer) {
         localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);
       }
@@ -2127,11 +2125,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         var trueAnswers = this.question.answers.filter(function (x) {
           return x.is_true;
         });
+        console.log(this.userAnswer, 'this.userAnswer');
+        console.log(trueAnswers, 'trueAnswers');
 
         if (this.userAnswer.size == trueAnswers.length) {
           var flag = true;
           trueAnswers.map(function (x) {
             if (!_this2.userAnswer.has(String(x.id))) {
+              console.log('IO');
               flag = false;
             }
           });
