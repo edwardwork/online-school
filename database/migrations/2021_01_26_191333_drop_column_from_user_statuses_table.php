@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropColumnFromQuestionsTable extends Migration
+class DropColumnFromUserStatusesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class DropColumnFromQuestionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('questions', function (Blueprint $table) {
+        Schema::table('user_statuses', function (Blueprint $table) {
             $table->dropColumn('question_ids');
             $table->dropColumn('current_position');
         });
@@ -26,7 +26,7 @@ class DropColumnFromQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('questions', function (Blueprint $table) {
+        Schema::table('user_statuses', function (Blueprint $table) {
             //
         });
     }

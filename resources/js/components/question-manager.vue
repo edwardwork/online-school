@@ -9,10 +9,10 @@
             </div>
         </div>
 
-        <div v-if="question.type == 3">
+        <div v-show="question.type == 3">
             <p>Ваш ответ будет принят, как:</p>
-            <ol>
-                <li v-for="item in userAnswer">{{ item }}</li>
+            <ol ref="exampleAnswer">
+
             </ol>
         </div>
 
@@ -26,7 +26,7 @@ export default {
     name: "question-manager",
     data() {
         return {
-            userAnswer: new Set()
+            userAnswer: new Set(),
         }
     },
     props: {
@@ -52,6 +52,12 @@ export default {
                 }
                 if(e.target.checked == false) {
                     this.userAnswer.delete(e.target.value);
+                }
+
+                this.$refs['exampleAnswer'].innerHTML = '';
+                for(let i of this.userAnswer) {
+                    let answer = this.question.answers.find(x => x.id == i);
+                    this.$refs['exampleAnswer'].innerHTML += `<li>${answer.text}</li>`
                 }
             }
         },

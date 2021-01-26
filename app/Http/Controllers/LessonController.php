@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\CheckAccessToLesson;
 use App\Models\Lesson;
 use App\Models\UserStatus;
-use App\Services\ClassroomService;
+use App\Models\QuestionView;
 
 class LessonController extends Controller
 {
@@ -19,8 +19,6 @@ class LessonController extends Controller
                 'user_id' => $user->id
             ],
             [
-                'question_ids' => ClassroomService::getRandomQuestionsForLessonsByFormat($lesson),
-                'current_position' => -1,
                 'attempt' => 0,
                 'count_true_answers' => 0,
                 'current_duration' => 0,
@@ -45,10 +43,22 @@ class LessonController extends Controller
             throw new \Exception('Для этого урока не заданы ответы на вопросы');
         }
 
-        $questionIds = explode(" ", $lesson_status->question_ids);
+        $questionCount = $lesson->question_count;
         $sortedQuestions = [];
-        foreach ($questionIds as $questionId) {
-            $sortedQuestions[] = $questions->firstWhere('id', $questionId);
+        $questionViews = QuestionView::all();
+
+        for($i = 0; $i < 10; $i++) {
+            foreach ($questionViews as $questionView) {
+                foreach ($questions->shuffle() as $question) {
+                    if($questionView->id == $question->question_view_id
+                        && !in_array($question, $sortedQuestions)
+                        && count($sortedQuestions) != $questionCount
+                    ) {
+                        $sortedQuestions[] = $question;
+                        break;
+                    }
+                }
+            }
         }
 
         return view('layouts.lessons.show')

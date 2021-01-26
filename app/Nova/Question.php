@@ -55,6 +55,7 @@ class Question extends Resource
             ]),
             Image::make('Image', 'image_url'),
             BelongsTo::make('Lesson'),
+            BelongsTo::make('Question view', 'questionView', 'App\Nova\QuestionView'),
             HasMany::make('Answers', 'answers', 'App\Nova\Answer')
         ];
     }

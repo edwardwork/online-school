@@ -1951,7 +1951,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       showQuestions: false,
-      current_position: -1,
+      current_position: 0,
       infoText: '',
       testIsOver: false,
       testIsClosed: false
@@ -1969,26 +1969,34 @@ __webpack_require__.r(__webpack_exports__);
       array.sort(function () {
         return Math.random() - 0.5;
       });
+    },
+    startTest: function startTest() {
+      this.showQuestions = true;
+      axios.post('/userStatus/update', {
+        'lesson_id': this.questions[0].lesson_id,
+        'count_true_answers': 0,
+        'needIncreaseAttempt': false
+      });
     }
   },
   mounted: function mounted() {
     var _this = this;
 
     localStorage.setItem('true_answers', this.status.count_true_answers ? 0 : this.status.count_true_answers);
-    this.current_position = this.status.current_position == -1 ? 0 : this.status.current_position;
     this.testIsOver = this.status.is_success;
-    this.testIsClosed = this.status.attempt == this.status.max_attempt;
+    this.testIsClosed = this.status.attempt >= this.status.max_attempt;
     this.shuffle(this.questions);
     Event.listen('next-question', function (obj) {
       if (obj.isCorrectAnswer) {
         localStorage.setItem('true_answers', Number(localStorage.getItem('true_answers')) + 1);
       }
 
-      axios.post('/userStatus/update', {
-        'lesson_id': _this.questions[0].lesson_id,
-        'count_true_answers': Number(localStorage.getItem('true_answers')),
-        'current_position': _this.current_position + 1
-      });
+      if (_this.current_position == _this.questions.length - 1) {
+        axios.post('/userStatus/update', {
+          'lesson_id': _this.questions[0].lesson_id,
+          'count_true_answers': Number(localStorage.getItem('true_answers'))
+        });
+      }
 
       if (_this.questions.length - 1 == _this.current_position) {
         _this.showQuestions = false;
@@ -2011,6 +2019,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
@@ -2049,6 +2063,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     handleCheckbox: function handleCheckbox(e) {
+      var _this = this;
+
       if (this.question.type == 1) {
         document.querySelectorAll("input[type='checkbox']").forEach(function (item) {
           item.checked = false;
@@ -2071,10 +2087,35 @@ __webpack_require__.r(__webpack_exports__);
         if (e.target.checked == false) {
           this.userAnswer["delete"](e.target.value);
         }
+
+        this.$refs['exampleAnswer'].innerHTML = '';
+
+        var _iterator = _createForOfIteratorHelper(this.userAnswer),
+            _step;
+
+        try {
+          var _loop = function _loop() {
+            var i = _step.value;
+
+            var answer = _this.question.answers.find(function (x) {
+              return x.id == i;
+            });
+
+            _this.$refs['exampleAnswer'].innerHTML += "<li>".concat(answer.text, "</li>");
+          };
+
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            _loop();
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
       }
     },
     sendAnswer: function sendAnswer() {
-      var _this = this;
+      var _this2 = this;
 
       if (this.userAnswer.size > 0) {
         document.querySelectorAll("input[type='checkbox']").forEach(function (item) {
@@ -2088,7 +2129,7 @@ __webpack_require__.r(__webpack_exports__);
         if (this.userAnswer.size == trueAnswers.length) {
           var flag = true;
           trueAnswers.map(function (x) {
-            if (!_this.userAnswer.has(String(x.id))) {
+            if (!_this2.userAnswer.has(String(x.id))) {
               flag = false;
             }
           });
@@ -37809,38 +37850,27 @@ var render = function() {
                 name: "show",
                 rawName: "v-show",
                 value:
-                  !_vm.showQuestions &&
-                  !_vm.status.is_success &&
-                  !_vm.testIsOver,
-                expression:
-                  "!showQuestions && !status.is_success && !testIsOver"
+                  !_vm.showQuestions && !_vm.testIsOver && !_vm.testIsClosed,
+                expression: "!showQuestions && !testIsOver && !testIsClosed"
               }
             ],
             staticClass: "btn btn-primary rem-3",
-            on: {
-              click: function($event) {
-                _vm.showQuestions = true
-              }
-            }
+            on: { click: _vm.startTest }
           },
           [_vm._v("\n            Start test\n        ")]
         ),
         _vm._v(" "),
         _vm.testIsOver
           ? _c("p", { staticClass: "rem-3" }, [
-              _vm._v("\n            Тест сдан :)\n        ")
+              _vm._v("\n            Test is over, thank you\n        ")
             ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.testIsClosed
+          : _vm.testIsClosed
           ? _c("p", { staticClass: "rem-3" }, [
               _vm._v(
                 "\n            Скорее всего, вы превысили количество попыток, выделенные для вас :(\n        "
               )
             ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.showQuestions
+          : _vm.showQuestions
           ? _c("question-manager", {
               attrs: { question: _vm.questions[_vm.current_position] }
             })
@@ -37920,19 +37950,24 @@ var render = function() {
       0
     ),
     _vm._v(" "),
-    _vm.question.type == 3
-      ? _c("div", [
-          _c("p", [_vm._v("Ваш ответ будет принят, как:")]),
-          _vm._v(" "),
-          _c(
-            "ol",
-            _vm._l(_vm.userAnswer, function(item) {
-              return _c("li", [_vm._v(_vm._s(item))])
-            }),
-            0
-          )
-        ])
-      : _vm._e(),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.question.type == 3,
+            expression: "question.type == 3"
+          }
+        ]
+      },
+      [
+        _c("p", [_vm._v("Ваш ответ будет принят, как:")]),
+        _vm._v(" "),
+        _c("ol", { ref: "exampleAnswer" })
+      ]
+    ),
     _vm._v(" "),
     _c(
       "button",

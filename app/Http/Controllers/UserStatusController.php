@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lesson;
 use App\Models\UserStatus;
-use App\Services\ClassroomService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,8 +18,6 @@ class UserStatusController extends Controller
                 'lesson_id' => $lessonId
             ],
             [
-                'question_ids' => ClassroomService::getRandomQuestionsForLessonsByFormat(Lesson::find($lessonId)),
-                'current_position' => -1,
                 'attempt' => 0,
                 'count_true_answers' => 0,
                 'current_duration' => 0,
@@ -31,12 +27,6 @@ class UserStatusController extends Controller
                 'threshold' => 80
             ]
         );
-
-        if (count(explode(' ', $model->question_ids)) < 1) {
-            $model->update([
-                'question_ids' => ClassroomService::getRandomQuestionsForLessonsByFormat(Lesson::find($lessonId)),
-            ]);
-        }
 
         return response()->json(["data" => $model]);
     }
@@ -53,20 +43,13 @@ class UserStatusController extends Controller
         if (!$model) {
             return response()->json(["data" => "Error, Object not found!"]);
         }
-
         $model->count_true_answers = $request->get("count_true_answers");
-        $model->current_position = $request->get("current_position");
-
-        if($model->current_position >= count(explode(' ', $model->question_ids))) {
+        if($request->get('needIncreaseAttempt', true)) {
             $model->attempt += 1;
-
-            if($model->count_true_answers / count(explode(' ', $model->question_ids)) * 100 >= $model->threshold) {
-                $model->is_success = true;
-            }
         }
 
-        if($model->current_position >= count(explode(' ', $model->question_ids))) {
-            $model->current_position = -1;
+        if( ($model->count_true_answers / $model->lesson->question_count * 100) >= $model->threshold) {
+            $model->is_success = true;
         }
 
         $model->save();

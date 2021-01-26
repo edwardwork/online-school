@@ -20,7 +20,7 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
-    public function question_view(): BelongsTo
+    public function questionView(): BelongsTo
     {
         return $this->belongsTo(QuestionView::class);
     }
