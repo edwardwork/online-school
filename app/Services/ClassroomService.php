@@ -3,21 +3,60 @@
 namespace App\Services;
 
 use App\Models\Lesson;
+use App\Models\UserStatus;
+use App\User;
 
 class ClassroomService
 {
-    public static function getRandomQuestionsForLessons(Lesson $lesson, $quantity = 5)
+    public static function allowUserToReadLesson(User $user, Lesson $lesson)
     {
-        return $lesson->questions()
-            ->orderByRaw('RAND()')
-            ->take($quantity)
-            ->get()
-            ->pluck('id')
-            ->toArray();
+        $status = UserStatus::firstOrCreate(
+            [
+                'lesson_id' => $lesson->id,
+                'user_id' => $user->id
+            ],
+            [
+                'attempt' => 0,
+                'count_true_answers' => 0,
+                'current_duration' => 0,
+                'is_success' => false,
+                'has_access' => true,
+                'max_attempt' => 3,
+                'max_duration' => 1000,
+                'threshold' => 80
+            ]
+        );
+
+        if(!$status->has_access) {
+            $status->update([
+                'has_access' => true
+            ]);
+        }
     }
 
-    public static function getRandomQuestionsForLessonsByFormat(Lesson $lesson, $quantity = 5)
+    public static function forbidUserToReadLesson(User $user, Lesson $lesson)
     {
-        return implode(" ", ClassroomService::getRandomQuestionsForLessons($lesson, $quantity));
+        $status = UserStatus::firstOrCreate(
+            [
+                'lesson_id' => $lesson->id,
+                'user_id' => $user->id
+            ],
+            [
+                'attempt' => 0,
+                'count_true_answers' => 0,
+                'current_duration' => 0,
+                'is_success' => false,
+                'has_access' => false,
+                'max_attempt' => 3,
+                'max_duration' => 1000,
+                'threshold' => 80
+            ]
+        );
+
+        if($status->has_access) {
+            $status->update([
+                'has_access' => false
+            ]);
+        }
     }
 }

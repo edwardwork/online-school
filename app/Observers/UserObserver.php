@@ -28,6 +28,7 @@ class UserObserver
                     'count_true_answers' => 0,
                     'current_duration' => 0,
                     'is_success' => false,
+                    'has_access' => $user->subscription->id == $lesson->subscription->id,
                     'max_attempt' => 3,
                     'max_duration' => 1000,
                     'threshold' => 80
