@@ -30,11 +30,7 @@ class CheckAccessToLesson
                 ]
             );
 
-        if($status->has_access) {
-            return true;
-        }
-
-        return $user->can('read', $lesson);
+        return $status->has_access;
     }
 
     public static function isSameSubscription(User $user, Lesson $lesson)

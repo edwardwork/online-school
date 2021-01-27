@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Models\Lesson;
 use App\Models\UserStatus;
-use App\Services\ClassroomService;
 use App\User;
 
 class UserObserver
@@ -25,8 +24,6 @@ class UserObserver
                     'user_id' => $user->id
                 ],
                 [
-                    'question_ids' => ClassroomService::getRandomQuestionsForLessonsByFormat($lesson),
-                    'current_position' => -1,
                     'attempt' => 0,
                     'count_true_answers' => 0,
                     'current_duration' => 0,
