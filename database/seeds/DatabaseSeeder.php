@@ -35,10 +35,6 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('Таблица категорий заполнена данными!');
 
-        $this->call('VideosTableSeeder');
-
-        $this->command->info('Таблица видео заполнена данными!');
-
         $this->call('UserTableSeeder');
 
         $this->command->info('Таблица пользователей заполнена данными!');

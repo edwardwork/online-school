@@ -24,4 +24,9 @@ class Lesson extends Model
     {
         return $this->belongsTo(Subscription::class);
     }
+
+    public function manuals(): HasMany
+    {
+        return $this->hasMany(Manual::class);
+    }
 }
