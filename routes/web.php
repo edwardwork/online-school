@@ -36,17 +36,7 @@ Route::group(['prefix' => 'topics', 'middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'lessons', 'middleware' => 'auth'], function () {
 
-    Route::post('/getQuestionsAndAnswers', 'LessonController@getQuestionsAndAnswers')->name('loadData');
-
-    Route::get('/create/{topic_id}', 'LessonController@create');
-
-    Route::get('/{lesson_id}', 'LessonController@show')->name('lesson.show');
-
-    Route::post('/', 'LessonController@store');
-
-    Route::put('/{lesson}', 'LessonController@update');
-
-    Route::delete('/{lesson}', 'LessonController@destroy');
+    Route::get('/{lesson}', 'LessonController@show')->name('lesson.show');
 
 });
 

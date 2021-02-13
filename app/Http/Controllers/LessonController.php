@@ -9,10 +9,10 @@ use App\Models\QuestionView;
 
 class LessonController extends Controller
 {
-    public function show(int $lesson_id)
+    public function show(Lesson $lesson)
     {
         $user = \Auth::user();
-        $lesson = Lesson::with(['questions.answers', 'topic'])->find($lesson_id);
+        $lesson->load(['questions.answers', 'topic']);
         $lesson_status = UserStatus::firstOrCreate(
             [
                 'lesson_id' => $lesson->id,

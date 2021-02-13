@@ -7,7 +7,7 @@ use App\Models\Lesson;
 
 class CheckAccessToLesson
 {
-    public static function check(User $user, Lesson $lesson)
+    public static function check(User $user, Lesson $lesson): bool
     {
         if (!static::isSameSubscription($user, $lesson)) {
             return false;
@@ -33,7 +33,7 @@ class CheckAccessToLesson
         return $status->has_access;
     }
 
-    public static function isSameSubscription(User $user, Lesson $lesson)
+    public static function isSameSubscription(User $user, Lesson $lesson): bool
     {
         return $user->subscription_id === $lesson->subscription_id;
     }

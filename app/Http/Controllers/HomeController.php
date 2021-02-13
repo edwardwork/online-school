@@ -19,34 +19,28 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
-     *
      * @return Renderable
      */
-    public function index()
+    public function index(): Renderable
     {
         return view('home');
     }
 
     /**
-     * Show the application dashboard.
-     *
      * @return Renderable
      */
-    public function showCategories()
+    public function showCategories(): Renderable
     {
         $categories =  Category::all();
         return view('layouts.categories.index', compact('categories'));
     }
 
     /**
-     * Show the application dashboard.
-     *
      * @param Request $request
      * @param Category $category
      * @return Renderable
      */
-    public function showCategory(Request $request, Category $category)
+    public function showCategory(Request $request, Category $category): Renderable
     {
         $category->load('topics');
         return view('layouts.categories.show', compact('category'));
