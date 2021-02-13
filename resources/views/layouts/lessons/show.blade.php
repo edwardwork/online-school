@@ -15,9 +15,9 @@
 					@endif
 				@endif
 
-                @if(!is_null($lesson->pdf_url))
+                @if($lesson->manuals(\Auth::user())->get())
                     <div>
-                        <a href="{{ asset('storage/'.$lesson->pdf_url) }}" target="_blank" class="alert-link rem-2">
+                        <a href="{{ asset('storage/'.$lesson->manuals(\Auth::user())->first()->file_path) }}" target="_blank" class="alert-link rem-2">
                             <div class="alert alert-primary" role="alert">
                                 Открыть методичку
                             </div>

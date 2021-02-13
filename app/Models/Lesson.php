@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,8 +26,12 @@ class Lesson extends Model
         return $this->belongsTo(Subscription::class);
     }
 
-    public function manuals(): HasMany
+    public function manuals(User $user = null): HasMany
     {
-        return $this->hasMany(Manual::class);
+        if($user) {
+            return $this->hasMany(Manual::class)->where('user_id', $user->id);
+        } else {
+            return $this->hasMany(Manual::class);
+        }
     }
 }

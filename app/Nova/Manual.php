@@ -5,27 +5,24 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\File;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Lesson extends Resource
+class Manual extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Lesson::class;
+    public static $model = \App\Models\Manual::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -33,7 +30,7 @@ class Lesson extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'id',
     ];
 
     /**
@@ -46,13 +43,9 @@ class Lesson extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Title', 'name'),
-            Text::make('Vimeo ID', 'video_id'),
-            Number::make('Question count', 'question_count'),
-            HasMany::make('PDF', 'manuals', 'App\Nova\Manual')->nullable(),
-            BelongsTo::make('Topic', 'topic', 'App\Nova\Topic'),
-            BelongsTo::make('Subscription', 'subscription', 'App\Nova\Subscription'),
-            HasMany::make('Questions', 'questions', 'App\Nova\Question')
+            BelongsTo::make('User', 'user', 'App\Nova\User'),
+            BelongsTo::make('Lesson', 'lesson', 'App\Nova\Lesson'),
+            File::make('PDF', 'file_path'),
         ];
     }
 
