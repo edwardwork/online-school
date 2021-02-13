@@ -20,17 +20,7 @@ Route::group(['prefix' => 'topics', 'middleware' => 'auth'], function () {
 
     Route::get('/', 'TopicController@index')->name('topics.list');
 
-    Route::get('/create', 'TopicController@create');
-
-    Route::get('/edit/{topic}', 'TopicController@edit');
-
     Route::get('/{topic}', 'TopicController@show')->name('topics.show');
-
-    Route::post('/', 'TopicController@store');
-
-    Route::put('/{topic}', 'TopicController@update');
-
-    Route::delete('/{topic}', 'TopicController@destroy');
 
 });
 
@@ -57,7 +47,5 @@ Route::group(['prefix' => 'categories', 'middleware' => 'auth'], function () {
     Route::get('/{category}', 'HomeController@showCategory')->name("category.show");
 
 });
-
-Route::get('/introduction', 'IntroductionVideoController@index');
 
 Auth::routes();
