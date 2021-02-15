@@ -33,6 +33,11 @@ class CheckAccessToLesson
         return $status->has_access;
     }
 
+    /**
+     * @param User $user
+     * @param Lesson $lesson
+     * @return bool
+     */
     public static function isSameSubscription(User $user, Lesson $lesson): bool
     {
         return $user->subscription_id === $lesson->subscription_id;
