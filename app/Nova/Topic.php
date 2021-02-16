@@ -48,6 +48,14 @@ class Topic extends Resource
         ];
     }
 
+    public function title()
+    {
+        if(!empty($this->category)) {
+            return $this->name.' | '.$this->category->title .'(category)';
+        }
+        return $this->name;
+    }
+
     /**
      * Get the cards available for the request.
      *
