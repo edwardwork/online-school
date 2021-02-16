@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Lesson;
 use App\Models\Manual;
 use App\Models\Subscription;
 use App\Models\UserStatus;
@@ -50,6 +51,25 @@ class User extends Authenticatable
     public function lessonStatuses(): HasMany
     {
         return $this->hasMany(UserStatus::class);
+    }
+
+    public function getLessonStatus(Lesson $lesson): UserStatus
+    {
+        $this->lessonStatuses()->firstOrCreate(
+            [
+                'user_id'      => $this->id,
+                'lesson_id'    => $lesson->id
+            ],
+            [
+                'attempt'               => 0,
+                'count_true_answers'    => 0,
+                'current_duration'      => 0,
+                'is_success'            => false,
+                'max_attempt'           => 3,
+                'max_duration'          => 1000,
+                'threshold'             => 80
+            ]
+        );
     }
 
     public function manuals(): HasMany

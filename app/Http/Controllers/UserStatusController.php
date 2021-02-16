@@ -2,36 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lesson;
 use App\Models\UserStatus;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class UserStatusController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $lessonId = $request->get("lesson_id");
+        $user = Auth::user();
         // Try to get record
-        $model = UserStatus::firstOrCreate(
-            [
-                'user_id' => Auth::id(),
-                'lesson_id' => $lessonId
-            ],
-            [
-                'attempt' => 0,
-                'count_true_answers' => 0,
-                'current_duration' => 0,
-                'is_success' => false,
-                'max_attempt' => 3,
-                'max_duration' => 1000,
-                'threshold' => 80
-            ]
-        );
+        $model = $user->getLessonStatus(Lesson::findOrFail($lessonId));
 
         return response()->json(["data" => $model]);
     }
 
-    public function update(Request $request, UserStatus $userStatus)
+    public function update(Request $request, UserStatus $userStatus): JsonResponse
     {
         $lessonId = $request->get("lesson_id");
 
@@ -57,7 +46,7 @@ class UserStatusController extends Controller
         return response()->json(["data" => $model]);
     }
 
-    public function updateDuration(Request $request, UserStatus $userStatus)
+    public function updateDuration(Request $request, UserStatus $userStatus): JsonResponse
     {
         $lessonId = $request->get("lesson_id");
 

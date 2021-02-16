@@ -13,22 +13,7 @@ class CheckAccessToLesson
             return false;
         }
 
-        $status = $user->lessonStatuses()
-            ->firstOrCreate(
-                [
-                    'user_id' => $user->id,
-                    'lesson_id' => $lesson->id
-                ],
-                [
-                    'attempt' => 0,
-                    'count_true_answers' => 0,
-                    'current_duration' => 0,
-                    'is_success' => false,
-                    'max_attempt' => 3,
-                    'max_duration' => 1000,
-                    'threshold' => 80
-                ]
-            );
+        $status = $user->getLessonStatus($lesson);
 
         return $status->has_access;
     }

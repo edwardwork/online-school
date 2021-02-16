@@ -13,21 +13,7 @@ class LessonController extends Controller
     {
         $user = \Auth::user();
         $lesson->load(['questions.answers', 'topic']);
-        $lesson_status = UserStatus::firstOrCreate(
-            [
-                'lesson_id' => $lesson->id,
-                'user_id' => $user->id
-            ],
-            [
-                'attempt' => 0,
-                'count_true_answers' => 0,
-                'current_duration' => 0,
-                'is_success' => false,
-                'max_attempt' => 3,
-                'max_duration' => 1000,
-                'threshold' => 80
-            ]
-        );
+        $lessonStatus = $user->getLessonStatus($lesson);
 
         if(!CheckAccessToLesson::check($user, $lesson)) {
             throw new \Exception('По вашей подписке не возможно получить доступ к этому уроку');
@@ -67,7 +53,7 @@ class LessonController extends Controller
                 'questions' => collect($sortedQuestions),
                 'answers'   => $answers,
                 'topic'     => $lesson->topic,
-                'status'    => $lesson_status
+                'status'    => $lessonStatus
             ]);
     }
 }
