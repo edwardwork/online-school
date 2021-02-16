@@ -15,7 +15,7 @@
 					@endif
 				@endif
 
-                @if($lesson->manuals(\Auth::user())->get())
+                @if($lesson->manuals(\Auth::user())->get()->isNotEmpty())
                     <div>
                         <a href="{{ asset('storage/'.$lesson->manuals(\Auth::user())->first()->file_path) }}" target="_blank" class="alert-link rem-2">
                             <div class="alert alert-primary" role="alert">
