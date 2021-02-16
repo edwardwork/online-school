@@ -45,4 +45,9 @@ class HomeController extends Controller
         $category->load('topics');
         return view('layouts.categories.show', compact('category'));
     }
+
+    public function showIntroduction(Request $request)
+    {
+        return view('layouts.introduction.show');
+    }
 }

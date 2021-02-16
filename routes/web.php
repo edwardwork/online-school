@@ -48,4 +48,10 @@ Route::group(['prefix' => 'categories', 'middleware' => 'auth'], function () {
 
 });
 
+Route::group(['prefix' => 'introduction', 'middleware' => 'auth'], function () {
+
+    Route::get('/', 'HomeController@showIntroduction');
+
+});
+
 Auth::routes();
