@@ -53,9 +53,9 @@ class User extends Authenticatable
         return $this->hasMany(UserStatus::class);
     }
 
-    public function getLessonStatus(Lesson $lesson): UserStatus
+    public function getLessonStatus(Lesson $lesson): \Illuminate\Database\Eloquent\Model
     {
-        $this->lessonStatuses()->firstOrCreate(
+        return $this->lessonStatuses()->firstOrCreate(
             [
                 'user_id'      => $this->id,
                 'lesson_id'    => $lesson->id
