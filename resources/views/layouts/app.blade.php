@@ -72,7 +72,7 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     @auth
-                                        <a href="{{ url('/topics') }}" class="dropdown-item rem-3">
+                                        <a href="{{ url(route('category.list')) }}" class="dropdown-item rem-3">
                                             Обучение
                                         </a>
                                     @else
