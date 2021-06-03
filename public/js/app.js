@@ -37932,6 +37932,7 @@ var render = function() {
     _vm.question.image_url
       ? _c("img", {
           staticClass: "w-100",
+          staticStyle: { "max-width": "200px" },
           attrs: { src: "/storage/" + _vm.question.image_url, alt: "" }
         })
       : _vm._e(),
