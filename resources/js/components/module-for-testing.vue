@@ -11,7 +11,8 @@
             </button>
 
             <p v-if="testIsOver" class="rem-3">
-                Test is over, thank you
+                Test is over, thank you. <br> Your result:
+                <k-progress :percent="percentTrueAnswers"></k-progress>
             </p>
 
             <p v-else-if="testIsClosed" class="rem-3">
@@ -27,6 +28,9 @@
 </template>
 
 <script>
+    import KProgress from 'k-progress';
+    Vue.component('k-progress', KProgress);
+
     export default {
         name: "module-for-testing",
         props: {
@@ -40,6 +44,7 @@
                 infoText: '',
                 testIsOver: false,
                 testIsClosed: false,
+                percentTrueAnswers: 0
             }
         },
         methods: {
@@ -85,7 +90,9 @@
                     axios.post('/userStatus/update', {
                         'lesson_id': this.questions[0].lesson_id,
                         'count_true_answers': Number(localStorage.getItem('true_answers')),
-                    })
+                    }).then(response => {
+                        this.percentTrueAnswers = (response.data.data.count_true_answers / response.data.data.lesson.question_count * 100)
+                    });
                 }
                 this.current_position++;
             })
