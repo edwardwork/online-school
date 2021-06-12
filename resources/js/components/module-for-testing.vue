@@ -11,8 +11,13 @@
             </button>
 
             <p v-if="testIsOver" class="rem-3">
-                Test is over, thank you. <br> Your result:
+                Test is over, thank you.
+                <br>
+                You use {{ currentAttempt }} of {{ maxAttempt }} available attempts
+                <br>
+                Your result:
                 <k-progress :percent="percentTrueAnswers"></k-progress>
+                <br>
             </p>
 
             <p v-else-if="testIsClosed" class="rem-3">
@@ -44,7 +49,9 @@
                 infoText: '',
                 testIsOver: false,
                 testIsClosed: false,
-                percentTrueAnswers: 0
+                percentTrueAnswers: 0,
+                currentAttempt: 1,
+                maxAttempt: 3
             }
         },
         methods: {
@@ -92,6 +99,8 @@
                         'count_true_answers': Number(localStorage.getItem('true_answers')),
                     }).then(response => {
                         this.percentTrueAnswers = (response.data.data.count_true_answers / response.data.data.lesson.question_count * 100)
+                        this.currentAttempt = response.data.data.attempt;
+                        this.maxAttempt = response.data.data.max_attempt;
                     });
                 }
                 this.current_position++;

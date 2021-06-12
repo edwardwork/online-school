@@ -1939,6 +1939,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 Vue.component('k-progress', k_progress__WEBPACK_IMPORTED_MODULE_0___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1960,7 +1965,9 @@ Vue.component('k-progress', k_progress__WEBPACK_IMPORTED_MODULE_0___default.a);
       infoText: '',
       testIsOver: false,
       testIsClosed: false,
-      percentTrueAnswers: 0
+      percentTrueAnswers: 0,
+      currentAttempt: 1,
+      maxAttempt: 3
     };
   },
   methods: {
@@ -2008,6 +2015,8 @@ Vue.component('k-progress', k_progress__WEBPACK_IMPORTED_MODULE_0___default.a);
           'count_true_answers': Number(localStorage.getItem('true_answers'))
         }).then(function (response) {
           _this.percentTrueAnswers = response.data.data.count_true_answers / response.data.data.lesson.question_count * 100;
+          _this.currentAttempt = response.data.data.attempt;
+          _this.maxAttempt = response.data.data.max_attempt;
         });
       }
 
@@ -37892,10 +37901,22 @@ var render = function() {
               "p",
               { staticClass: "rem-3" },
               [
-                _vm._v("\n            Test is over, thank you. "),
+                _vm._v("\n            Test is over, thank you.\n            "),
                 _c("br"),
-                _vm._v(" Your result:\n            "),
-                _c("k-progress", { attrs: { percent: _vm.percentTrueAnswers } })
+                _vm._v(
+                  "\n            You use " +
+                    _vm._s(_vm.currentAttempt) +
+                    " of " +
+                    _vm._s(_vm.maxAttempt) +
+                    " available attempts\n            "
+                ),
+                _c("br"),
+                _vm._v("\n            Your result:\n            "),
+                _c("k-progress", {
+                  attrs: { percent: _vm.percentTrueAnswers }
+                }),
+                _vm._v(" "),
+                _c("br")
               ],
               1
             )
