@@ -79,6 +79,7 @@
         mounted() {
             localStorage.setItem('true_answers', this.status.count_true_answers ? 0 : this.status.count_true_answers);
             this.testIsOver = this.status.is_success;
+            this.percentTrueAnswers = this.status.count_true_answers / this.status.lesson.question_count * 100;
             this.testIsClosed = this.status.attempt >= this.status.max_attempt;
 
             this.shuffle(this.questions);

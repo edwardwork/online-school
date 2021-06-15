@@ -14,6 +14,7 @@ class LessonController extends Controller
         $user = \Auth::user();
         $lesson->load(['questions.answers', 'topic']);
         $lessonStatus = $user->getLessonStatus($lesson);
+        $lessonStatus->lesson = $lesson;
 
         if(!CheckAccessToLesson::check($user, $lesson)) {
             throw new \Exception('По вашей подписке не возможно получить доступ к этому уроку');

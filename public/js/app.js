@@ -1997,6 +1997,7 @@ Vue.component('k-progress', k_progress__WEBPACK_IMPORTED_MODULE_0___default.a);
 
     localStorage.setItem('true_answers', this.status.count_true_answers ? 0 : this.status.count_true_answers);
     this.testIsOver = this.status.is_success;
+    this.percentTrueAnswers = this.status.count_true_answers / this.status.lesson.question_count * 100;
     this.testIsClosed = this.status.attempt >= this.status.max_attempt;
     this.shuffle(this.questions);
     Event.listen('next-question', function (obj) {
